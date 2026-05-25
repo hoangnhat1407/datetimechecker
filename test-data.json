@@ -1,0 +1,8 @@
+[
+  { "day": "1",  "month": "1",  "year": "2000", "expectedValid": true  },
+  { "day": "29", "month": "2",  "year": "2000", "expectedValid": true  },
+  { "day": "29", "month": "2",  "year": "1900", "expectedValid": false },
+  { "day": "31", "month": "4",  "year": "2023", "expectedValid": false },
+  { "day": "abc","month": "1",  "year": "2000", "expectedValid": false },
+  { "day": "0",  "month": "1",  "year": "2000", "expectedValid": false }
+]
