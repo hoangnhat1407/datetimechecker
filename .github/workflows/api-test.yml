@@ -13,14 +13,21 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Build app
+        run: ./mvnw package -DskipTests
+
       - name: Start Spring Boot
-        run: ./mvnw spring-boot:run &
+        run: java -jar target/*.jar &
 
       - name: Wait for app to be ready
         run: |
+          echo "Waiting for Spring Boot..."
           for i in {1..30}; do
-            curl -s http://localhost:8080/api/datetime/check && break
-            echo "Waiting... ($i)"
+            if curl -s http://localhost:8080/api/datetime/check > /dev/null 2>&1; then
+              echo "App is ready!"
+              break
+            fi
+            echo "Attempt $i - not ready yet"
             sleep 3
           done
 
