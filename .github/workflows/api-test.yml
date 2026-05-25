@@ -1,0 +1,26 @@
+name: API Tests
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Start Spring Boot
+        run: ./mvnw spring-boot:run &
+
+      - name: Wait for app
+        run: sleep 15
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run API Tests
+        run: newman run "DateTimeChecker API.postman_collection.json" --iteration-data test-data.json --env-var "baseUrl=http://localhost:8080"
