@@ -14,7 +14,9 @@ jobs:
           distribution: 'temurin'
 
       - name: Build app
-        run: ./mvnw package -DskipTests
+        run: |
+          chmod +x mvnw
+          ./mvnw package -DskipTests
 
       - name: Start Spring Boot
         run: java -jar target/*.jar &
