@@ -78,7 +78,7 @@ public class DateTimeCheckerService {
      * - Tháng 2: kiểm tra năm nhuận
      * - Các tháng khác: kiểm tra số ngày tối đa
      */
-    boolean isValidDate(int day, int month, int year) {
+    public boolean isValidDate(int day, int month, int year) {
         int maxDay;
         if (month == 2) {
             maxDay = isLeapYear(year) ? 29 : 28;
@@ -95,7 +95,7 @@ public class DateTimeCheckerService {
      * - Chia hết cho 4 → nhuận
      * - Còn lại → không nhuận
      */
-    boolean isLeapYear(int year) {
+    public boolean isLeapYear(int year) {
         if (year % 400 == 0) return true;
         if (year % 100 == 0) return false;
         return year % 4 == 0;
