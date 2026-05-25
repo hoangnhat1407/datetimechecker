@@ -16,8 +16,13 @@ jobs:
       - name: Start Spring Boot
         run: ./mvnw spring-boot:run &
 
-      - name: Wait for app
-        run: sleep 15
+      - name: Wait for app to be ready
+        run: |
+          for i in {1..30}; do
+            curl -s http://localhost:8080/api/datetime/check && break
+            echo "Waiting... ($i)"
+            sleep 3
+          done
 
       - name: Install Newman
         run: npm install -g newman
