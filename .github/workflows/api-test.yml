@@ -2,7 +2,7 @@ name: API Tests
 on: [push]
 
 jobs:
-  test:
+  api-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,7 +23,6 @@ jobs:
 
       - name: Wait for app to be ready
         run: |
-          echo "Waiting for Spring Boot..."
           for i in {1..30}; do
             if curl -s http://localhost:8080/api/datetime/check > /dev/null 2>&1; then
               echo "App is ready!"
@@ -38,3 +37,40 @@ jobs:
 
       - name: Run API Tests
         run: newman run "DateTimeChecker API.postman_collection.json" --iteration-data test-data.json --env-var "baseUrl=http://localhost:8080"
+
+  e2e-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build app
+        run: |
+          chmod +x mvnw
+          ./mvnw package -DskipTests
+
+      - name: Start Spring Boot
+        run: java -jar target/*.jar &
+
+      - name: Wait for app to be ready
+        run: |
+          for i in {1..30}; do
+            if curl -s http://localhost:8080/api/datetime/check > /dev/null 2>&1; then
+              echo "App is ready!"
+              break
+            fi
+            sleep 3
+          done
+
+      - name: Install Playwright
+        run: |
+          npm install @playwright/test
+          npx playwright install --with-deps chromium
+
+      - name: Run E2E Tests
+        run: npx playwright test
