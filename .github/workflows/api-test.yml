@@ -16,6 +16,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Run Unit Tests
+        run: ./mvnw test
+
       - name: Build app
         run: |
           chmod +x mvnw
