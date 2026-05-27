@@ -69,9 +69,10 @@ jobs:
 
       - name: Install Playwright
         run: |
-            npm init -y
-            npm install @playwright/test
-            ./node_modules/.bin/playwright install --with-deps chromium
+          npm init -y
+          npm install @playwright/test
+          chmod +x ./node_modules/.bin/playwright
+          ./node_modules/.bin/playwright install --with-deps chromium
 
       - name: Run E2E Tests
         run: ./node_modules/.bin/playwright test
