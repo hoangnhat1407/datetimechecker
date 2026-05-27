@@ -69,8 +69,49 @@ jobs:
 
       - name: Install Playwright
         run: |
+          npm init -y
           npm install @playwright/test
           npx playwright install --with-deps chromium
 
       - name: Run E2E Tests
         run: npx playwright test
+
+  k6-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build app
+        run: |
+          chmod +x mvnw
+          ./mvnw package -DskipTests
+
+      - name: Start Spring Boot
+        run: java -jar target/*.jar &
+
+      - name: Wait for app to be ready
+        run: |
+          for i in {1..30}; do
+            if curl -s http://localhost:8080/api/datetime/check > /dev/null 2>&1; then
+              echo "App is ready!"
+              break
+            fi
+            sleep 3
+          done
+
+      - name: Install k6
+        run: |
+          sudo gpg -k
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+
+      - name: Run k6 Load Test
+        run: k6 run k6/load-test.js
