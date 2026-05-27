@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DateTimeChecker</title>
+</head>
+
+<body>
+
+    <h1>DateTimeChecker</h1>
+
+    <div>
+        <input type="text" id="day" placeholder="Day" /><br>
+        <input type="text" id="month" placeholder="Month" /><br>
+        <input type="text" id="year" placeholder="Year" /><br>
+        <button onclick="check()">Check</button>
+    </div>
+
+    <p id="result" style="color: red;"></p>
+
+    <script>
+        async function check() {
+            const day = document.getElementById("day").value;
+            const month = document.getElementById("month").value;
+            const year = document.getElementById("year").value;
+
+            const response = await fetch("/api/datetime/check", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ day, month, year })
+            });
+
+            const data = await response.json();
+            const result = document.getElementById("result");
+            result.textContent = data.message;
+            result.style.color = data.valid ? "green" : "red";
+        }
+    </script>
+
+</body>
+
+</html>
