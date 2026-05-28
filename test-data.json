@@ -1,8 +1,344 @@
 [
-  { "day": "1",  "month": "1",  "year": "2000", "expectedValid": true  },
-  { "day": "29", "month": "2",  "year": "2000", "expectedValid": true  },
-  { "day": "29", "month": "2",  "year": "1900", "expectedValid": false },
-  { "day": "31", "month": "4",  "year": "2023", "expectedValid": false },
-  { "day": "abc","month": "1",  "year": "2000", "expectedValid": false },
-  { "day": "0",  "month": "1",  "year": "2000", "expectedValid": false }
+  {
+    "day": "1",
+    "month": "1",
+    "year": "2000",
+    "expectedValid": true
+  },
+  {
+    "day": "1",
+    "month": "2",
+    "year": "2000",
+    "expectedValid": true
+  },
+  {
+    "day": "1",
+    "month": "3",
+    "year": "2000",
+    "expectedValid": true
+  },
+  {
+    "day": "1",
+    "month": "4",
+    "year": "2000",
+    "expectedValid": true
+  },
+  {
+    "day": "1",
+    "month": "5",
+    "year": "2000",
+    "expectedValid": true
+  },
+  {
+    "day": "1",
+    "month": "6",
+    "year": "2000",
+    "expectedValid": true
+  },
+  {
+    "day": "1",
+    "month": "7",
+    "year": "2000",
+    "expectedValid": true
+  },
+  {
+    "day": "1",
+    "month": "8",
+    "year": "2000",
+    "expectedValid": true
+  },
+  {
+    "day": "1",
+    "month": "9",
+    "year": "2000",
+    "expectedValid": true
+  },
+  {
+    "day": "1",
+    "month": "10",
+    "year": "2000",
+    "expectedValid": true
+  },
+  {
+    "day": "1",
+    "month": "11",
+    "year": "2000",
+    "expectedValid": true
+  },
+  {
+    "day": "1",
+    "month": "12",
+    "year": "2000",
+    "expectedValid": true
+  },
+  {
+    "day": "31",
+    "month": "1",
+    "year": "2001",
+    "expectedValid": true
+  },
+  {
+    "day": "28",
+    "month": "2",
+    "year": "2001",
+    "expectedValid": true
+  },
+  {
+    "day": "31",
+    "month": "3",
+    "year": "2001",
+    "expectedValid": true
+  },
+  {
+    "day": "30",
+    "month": "4",
+    "year": "2001",
+    "expectedValid": true
+  },
+  {
+    "day": "31",
+    "month": "5",
+    "year": "2001",
+    "expectedValid": true
+  },
+  {
+    "day": "30",
+    "month": "6",
+    "year": "2001",
+    "expectedValid": true
+  },
+  {
+    "day": "31",
+    "month": "7",
+    "year": "2001",
+    "expectedValid": true
+  },
+  {
+    "day": "31",
+    "month": "8",
+    "year": "2001",
+    "expectedValid": true
+  },
+  {
+    "day": "30",
+    "month": "9",
+    "year": "2001",
+    "expectedValid": true
+  },
+  {
+    "day": "31",
+    "month": "10",
+    "year": "2001",
+    "expectedValid": true
+  },
+  {
+    "day": "30",
+    "month": "11",
+    "year": "2001",
+    "expectedValid": true
+  },
+  {
+    "day": "31",
+    "month": "12",
+    "year": "2001",
+    "expectedValid": true
+  },
+  {
+    "day": "29",
+    "month": "2",
+    "year": "2000",
+    "expectedValid": true
+  },
+  {
+    "day": "29",
+    "month": "2",
+    "year": "2004",
+    "expectedValid": true
+  },
+  {
+    "day": "29",
+    "month": "2",
+    "year": "2008",
+    "expectedValid": true
+  },
+  {
+    "day": "29",
+    "month": "2",
+    "year": "2400",
+    "expectedValid": true
+  },
+  {
+    "day": "29",
+    "month": "2",
+    "year": "1900",
+    "expectedValid": false
+  },
+  {
+    "day": "29",
+    "month": "2",
+    "year": "2100",
+    "expectedValid": false
+  },
+  {
+    "day": "29",
+    "month": "2",
+    "year": "2200",
+    "expectedValid": false
+  },
+  {
+    "day": "29",
+    "month": "2",
+    "year": "2300",
+    "expectedValid": false
+  },
+  {
+    "day": "0",
+    "month": "1",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "32",
+    "month": "1",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "99",
+    "month": "1",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "-1",
+    "month": "1",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": "0",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": "13",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": "99",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": "1",
+    "year": "999",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": "1",
+    "year": "3001",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": "1",
+    "year": "0",
+    "expectedValid": false
+  },
+  {
+    "day": "abc",
+    "month": "1",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": "abc",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": "1",
+    "year": "abc",
+    "expectedValid": false
+  },
+  {
+    "day": "",
+    "month": "1",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": "",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": "1",
+    "year": "",
+    "expectedValid": false
+  },
+  {
+    "day": " ",
+    "month": "1",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": " ",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": "1",
+    "year": " ",
+    "expectedValid": false
+  },
+  {
+    "day": "1.5",
+    "month": "1",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": "1.5",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": "1",
+    "year": "1.5",
+    "expectedValid": false
+  },
+  {
+    "day": "!@#",
+    "month": "1",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": "!@#",
+    "year": "2000",
+    "expectedValid": false
+  },
+  {
+    "day": "1",
+    "month": "1",
+    "year": "!@#",
+    "expectedValid": false
+  }
 ]
