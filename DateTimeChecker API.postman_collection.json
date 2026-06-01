@@ -14,9 +14,11 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));\r",
+              "const desc = pm.iterationData.get(\"description\") || \"\";\r",
               "\r",
-              "pm.test(\"Valid field matches expected\", () => {\r",
+              "pm.test(`[${desc}] Status 200`, () => pm.response.to.have.status(200));\r",
+              "\r",
+              "pm.test(`[${desc}] valid matches expected`, () => {\r",
               "    const json = pm.response.json();\r",
               "    const expected = pm.iterationData.get(\"expectedValid\");\r",
               "    pm.expect(json.valid).to.eql(expected);\r",

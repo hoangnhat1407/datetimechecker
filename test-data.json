@@ -3,342 +3,456 @@
     "day": "1",
     "month": "1",
     "year": "2000",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày đầu tháng: 1/1/2000 - hợp lệ"
   },
   {
     "day": "1",
     "month": "2",
     "year": "2000",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày đầu tháng: 1/2/2000 - hợp lệ"
   },
   {
     "day": "1",
     "month": "3",
     "year": "2000",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày đầu tháng: 1/3/2000 - hợp lệ"
   },
   {
     "day": "1",
     "month": "4",
     "year": "2000",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày đầu tháng: 1/4/2000 - hợp lệ"
   },
   {
     "day": "1",
     "month": "5",
     "year": "2000",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày đầu tháng: 1/5/2000 - hợp lệ"
   },
   {
     "day": "1",
     "month": "6",
     "year": "2000",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày đầu tháng: 1/6/2000 - hợp lệ"
   },
   {
     "day": "1",
     "month": "7",
     "year": "2000",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày đầu tháng: 1/7/2000 - hợp lệ"
   },
   {
     "day": "1",
     "month": "8",
     "year": "2000",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày đầu tháng: 1/8/2000 - hợp lệ"
   },
   {
     "day": "1",
     "month": "9",
     "year": "2000",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày đầu tháng: 1/9/2000 - hợp lệ"
   },
   {
     "day": "1",
     "month": "10",
     "year": "2000",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày đầu tháng: 1/10/2000 - hợp lệ"
   },
   {
     "day": "1",
     "month": "11",
     "year": "2000",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày đầu tháng: 1/11/2000 - hợp lệ"
   },
   {
     "day": "1",
     "month": "12",
     "year": "2000",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày đầu tháng: 1/12/2000 - hợp lệ"
   },
   {
     "day": "31",
     "month": "1",
     "year": "2001",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày cuối tháng: 31/1/2001 - hợp lệ"
   },
   {
     "day": "28",
     "month": "2",
     "year": "2001",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày cuối tháng: 28/2/2001 - hợp lệ"
   },
   {
     "day": "31",
     "month": "3",
     "year": "2001",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày cuối tháng: 31/3/2001 - hợp lệ"
   },
   {
     "day": "30",
     "month": "4",
     "year": "2001",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày cuối tháng: 30/4/2001 - hợp lệ"
   },
   {
     "day": "31",
     "month": "5",
     "year": "2001",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày cuối tháng: 31/5/2001 - hợp lệ"
   },
   {
     "day": "30",
     "month": "6",
     "year": "2001",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày cuối tháng: 30/6/2001 - hợp lệ"
   },
   {
     "day": "31",
     "month": "7",
     "year": "2001",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày cuối tháng: 31/7/2001 - hợp lệ"
   },
   {
     "day": "31",
     "month": "8",
     "year": "2001",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày cuối tháng: 31/8/2001 - hợp lệ"
   },
   {
     "day": "30",
     "month": "9",
     "year": "2001",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày cuối tháng: 30/9/2001 - hợp lệ"
   },
   {
     "day": "31",
     "month": "10",
     "year": "2001",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày cuối tháng: 31/10/2001 - hợp lệ"
   },
   {
     "day": "30",
     "month": "11",
     "year": "2001",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày cuối tháng: 30/11/2001 - hợp lệ"
   },
   {
     "day": "31",
     "month": "12",
     "year": "2001",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "Ngày cuối tháng: 31/12/2001 - hợp lệ"
   },
   {
     "day": "29",
     "month": "2",
     "year": "2000",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "29/2/2000 - năm nhuận hợp lệ"
   },
   {
     "day": "29",
     "month": "2",
     "year": "2004",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "29/2/2004 - năm nhuận hợp lệ"
   },
   {
     "day": "29",
     "month": "2",
     "year": "2008",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "29/2/2008 - năm nhuận hợp lệ"
   },
   {
     "day": "29",
     "month": "2",
     "year": "2400",
-    "expectedValid": true
+    "expectedValid": true,
+    "expectedField": null,
+    "description": "29/2/2400 - năm nhuận hợp lệ"
   },
   {
     "day": "29",
     "month": "2",
     "year": "1900",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": null,
+    "description": "29/2/1900 - không phải năm nhuận, không hợp lệ"
   },
   {
     "day": "29",
     "month": "2",
     "year": "2100",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": null,
+    "description": "29/2/2100 - không phải năm nhuận, không hợp lệ"
   },
   {
     "day": "29",
     "month": "2",
     "year": "2200",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": null,
+    "description": "29/2/2200 - không phải năm nhuận, không hợp lệ"
   },
   {
     "day": "29",
     "month": "2",
     "year": "2300",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": null,
+    "description": "29/2/2300 - không phải năm nhuận, không hợp lệ"
   },
   {
     "day": "0",
     "month": "1",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "day",
+    "description": "Day = 0 - ngoài phạm vi [1-31]"
   },
   {
     "day": "32",
     "month": "1",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "day",
+    "description": "Day = 32 - ngoài phạm vi [1-31]"
   },
   {
     "day": "99",
     "month": "1",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "day",
+    "description": "Day = 99 - ngoài phạm vi [1-31]"
   },
   {
     "day": "-1",
     "month": "1",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "day",
+    "description": "Day = -1 - ngoài phạm vi [1-31]"
   },
   {
     "day": "1",
     "month": "0",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "month",
+    "description": "Month = 0 - ngoài phạm vi [1-12]"
   },
   {
     "day": "1",
     "month": "13",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "month",
+    "description": "Month = 13 - ngoài phạm vi [1-12]"
   },
   {
     "day": "1",
     "month": "99",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "month",
+    "description": "Month = 99 - ngoài phạm vi [1-12]"
   },
   {
     "day": "1",
     "month": "1",
     "year": "999",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "year",
+    "description": "Year = 999 - ngoài phạm vi [1000-3000]"
   },
   {
     "day": "1",
     "month": "1",
     "year": "3001",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "year",
+    "description": "Year = 3001 - ngoài phạm vi [1000-3000]"
   },
   {
     "day": "1",
     "month": "1",
     "year": "0",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "year",
+    "description": "Year = 0 - ngoài phạm vi [1000-3000]"
   },
   {
     "day": "abc",
     "month": "1",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "day",
+    "description": "Day = \"abc\" - không phải số nguyên"
   },
   {
     "day": "1",
     "month": "abc",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "month",
+    "description": "Month = \"abc\" - không phải số nguyên"
   },
   {
     "day": "1",
     "month": "1",
     "year": "abc",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "year",
+    "description": "Year = \"abc\" - không phải số nguyên"
   },
   {
     "day": "",
     "month": "1",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "day",
+    "description": "Day = \"\" - không phải số nguyên"
   },
   {
     "day": "1",
     "month": "",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "month",
+    "description": "Month = \"\" - không phải số nguyên"
   },
   {
     "day": "1",
     "month": "1",
     "year": "",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "year",
+    "description": "Year = \"\" - không phải số nguyên"
   },
   {
     "day": " ",
     "month": "1",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "day",
+    "description": "Day = \" \" - không phải số nguyên"
   },
   {
     "day": "1",
     "month": " ",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "month",
+    "description": "Month = \" \" - không phải số nguyên"
   },
   {
     "day": "1",
     "month": "1",
     "year": " ",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "year",
+    "description": "Year = \" \" - không phải số nguyên"
   },
   {
     "day": "1.5",
     "month": "1",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "day",
+    "description": "Day = \"1.5\" - không phải số nguyên"
   },
   {
     "day": "1",
     "month": "1.5",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "month",
+    "description": "Month = \"1.5\" - không phải số nguyên"
   },
   {
     "day": "1",
     "month": "1",
     "year": "1.5",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "year",
+    "description": "Year = \"1.5\" - không phải số nguyên"
   },
   {
     "day": "!@#",
     "month": "1",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "day",
+    "description": "Day = \"!@#\" - không phải số nguyên"
   },
   {
     "day": "1",
     "month": "!@#",
     "year": "2000",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "month",
+    "description": "Month = \"!@#\" - không phải số nguyên"
   },
   {
     "day": "1",
     "month": "1",
     "year": "!@#",
-    "expectedValid": false
+    "expectedValid": false,
+    "expectedField": "year",
+    "description": "Year = \"!@#\" - không phải số nguyên"
   }
 ]
