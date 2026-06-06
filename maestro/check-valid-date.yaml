@@ -1,0 +1,21 @@
+appId: chromium
+---
+- openLink: http://localhost:8080/mobile/index.html
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# Test 1: Ngày hợp lệ
+- tapOn:
+    point: "50%,35%"
+- inputText: "15"
+- tapOn:
+    point: "50%,50%"
+- inputText: "6"
+- tapOn:
+    point: "50%,62%"
+- inputText: "2000"
+- tapOn:
+    point: "35%,75%"
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: valid-date-result
