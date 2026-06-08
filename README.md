@@ -38,7 +38,7 @@ Test logic validate trực tiếp trong Java, không cần chạy server.
 ./mvnw test
 ```
 
-Coverage: 17 test cases — day/month/year không phải số, out of range, năm nhuận, tháng thiếu/đủ.
+Coverage: chạy parameterized test trên toàn bộ 57 case từ `test-data.json` (day/month/year không phải số, out of range, năm nhuận, tháng thiếu/đủ...) + 4 unit test riêng cho logic `isLeapYear`.
 
 ---
 
@@ -57,7 +57,7 @@ newman run "DateTimeChecker API.postman_collection.json" \
   --env-var "baseUrl=http://localhost:8080"
 ```
 
-`test-data.json` chứa 6 test case với các ngày hợp lệ và không hợp lệ.
+`test-data.json` (sinh từ `generate-test-data.js`, dùng chung cho mọi loại test trong dự án) chứa 57 test case với các ngày hợp lệ và không hợp lệ — Newman chạy iteration qua toàn bộ tập này.
 
 ---
 
@@ -85,7 +85,7 @@ npx playwright test --headed=false
 slowMo: 1000  // 1 giây giữa mỗi thao tác
 ```
 
-Coverage: 5 test case — valid date, leap year, not leap year, invalid day, invalid month.
+Coverage: project **Desktop Chrome** (`test.spec.js`) chạy qua giao diện web với toàn bộ 57 case từ `test-data.json` — cùng bộ dữ liệu chia sẻ với Unit Test và API Test ở trên.
 
 ### Chạy riêng theo project (Desktop / Mobile)
 
