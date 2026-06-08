@@ -42,6 +42,7 @@ test.describe('Mobile - Flutter Web (DateTimeChecker)', () => {
       return res.json();
     });
     expect(result.valid).toBe(true);
+    await page.waitForTimeout(800); // dừng lại để xem kết quả khi demo
   });
 
   // --- Test 3+: Chạy toàn bộ test cases từ test-data.json qua mobile browser ---
@@ -57,6 +58,7 @@ test.describe('Mobile - Flutter Web (DateTimeChecker)', () => {
       }, { day: tc.day, month: tc.month, year: tc.year });
 
       expect(apiResponse.valid).toBe(tc.expectedValid);
+      await page.waitForTimeout(800); // dừng lại để xem kết quả khi demo
     });
   }
 
