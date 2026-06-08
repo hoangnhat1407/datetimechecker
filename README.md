@@ -87,9 +87,60 @@ slowMo: 1000  // 1 giây giữa mỗi thao tác
 
 Coverage: 5 test case — valid date, leap year, not leap year, invalid day, invalid month.
 
+### Chạy riêng theo project (Desktop / Mobile)
+
+`playwright.config.js` định nghĩa 2 project:
+- **Desktop Chrome** (`e2e/test.spec.js`) — test trang web thường tại `/`
+- **iPhone 14 Pro Max** (`e2e/mobile.spec.js`) — giả lập viewport mobile (430x932, touch) để test app Flutter Web tại `/mobile/index.html`: app load thành công, API trả đúng kết quả từ mobile context, chạy lại tập con test case từ `test-data.json`
+
+```bash
+npx playwright test --project="Desktop Chrome"
+npx playwright test --project="iPhone 14 Pro Max"
+
+# Xem trực quan từng thao tác nhập liệu trên canvas Flutter
+npx playwright test --project="iPhone 14 Pro Max" -g "Demo canvas" --headed --workers=1
+```
+
 ---
 
-## 4. Load Test (k6)
+## 4. Mobile App (Flutter Web)
+
+Ứng dụng Flutter Web cùng chức năng kiểm tra ngày (`mobile_app/`), dùng để demo & test trải nghiệm trên thiết bị di động. Build ra được nhúng vào Spring Boot tại `src/main/resources/static/mobile/` và phục vụ cùng server backend.
+
+### Chạy ở chế độ phát triển
+```bash
+cd mobile_app
+flutter run -d chrome
+```
+
+### Build & deploy vào Spring Boot
+```bash
+cd mobile_app
+flutter build web
+# copy nội dung build/web/* sang src/main/resources/static/mobile/
+```
+
+Sau khi Spring Boot chạy, truy cập: http://localhost:8080/mobile/index.html
+
+---
+
+## 5. Mobile UI Flow Test (Maestro)
+
+Mô phỏng thao tác chạm & gõ trực tiếp trên giao diện mobile (`maestro/check-valid-date.yaml`): mở app, nhập ngày/tháng/năm, bấm kiểm tra, chụp ảnh kết quả từng bước — gần với trải nghiệm người dùng thật nhất trong các loại test ở đây.
+
+> ⚠️ Tạm thời chưa chạy/test được (chưa setup môi trường Maestro) — flow này mới ở dạng khai báo, chưa được verify thực tế.
+
+### Cài đặt (1 lần)
+Theo hướng dẫn: https://maestro.mobile.dev
+
+### Chạy (Spring Boot phải đang chạy)
+```bash
+maestro test maestro/check-valid-date.yaml
+```
+
+---
+
+## 6. Load Test (k6)
 
 Test hiệu năng: bao nhiêu user đồng thời app vẫn chạy ổn.
 
@@ -112,7 +163,7 @@ Tiêu chí pass:
 
 ---
 
-## 5. CI/CD (GitHub Actions)
+## 7. CI/CD (GitHub Actions)
 
 Mỗi lần push code lên GitHub, pipeline tự động:
 1. Build Spring Boot
@@ -138,15 +189,22 @@ datetimechecker/
 │   │   ├── controller/DateTimeCheckerController.java
 │   │   ├── service/DateTimeCheckerService.java
 │   │   └── dto/DateTimeRequest.java, DateTimeResponse.java
-│   ├── main/resources/static/index.html   ← giao diện
+│   ├── main/resources/static/index.html   ← giao diện web thường
+│   ├── main/resources/static/mobile/      ← Flutter Web build (deploy từ mobile_app/)
 │   └── test/java/.../DateTimeCheckerServiceTest.java
+├── mobile_app/                             ← Flutter Web mobile app (source)
+│   └── lib/main.dart
 ├── e2e/
-│   └── test.spec.js                       ← Playwright E2E tests
+│   ├── test.spec.js                       ← Playwright E2E tests (Desktop Chrome)
+│   └── mobile.spec.js                     ← Playwright mobile tests (iPhone 14 Pro Max)
+├── maestro/
+│   └── check-valid-date.yaml              ← Maestro mobile UI flow test
 ├── k6/
 │   └── load-test.js                       ← k6 load tests
 ├── .github/workflows/
 │   └── api-test.yml                       ← CI/CD pipeline
 ├── DateTimeChecker API.postman_collection.json
+├── generate-test-data.js                  ← sinh test-data.json
 ├── test-data.json
-└── playwright.config.js
+└── playwright.config.js                   ← project Desktop Chrome + iPhone 14 Pro Max
 ```
