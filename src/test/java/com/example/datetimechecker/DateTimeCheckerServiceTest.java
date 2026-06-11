@@ -29,9 +29,9 @@ class DateTimeCheckerServiceTest {
     void validateDate(String day, String month, String year,
                       String description, boolean expectedValid, String expectedField) {
         DateTimeResponse res = service.check(new DateTimeRequest(day, month, year));
-        assertEquals(expectedValid, res.isValid(), description);
+        assertEquals(expectedValid, res.valid(), description);
         if (expectedField != null) {
-            assertEquals(expectedField, res.getField(), description);
+            assertEquals(expectedField, res.field(), description);
         }
     }
 

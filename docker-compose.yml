@@ -1,0 +1,36 @@
+services:
+  # Spring Boot app (kèm Flutter Web tại /mobile/index.html)
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+
+  # E2E test desktop: docker compose run --rm e2e-test
+  e2e-test:
+    image: mcr.microsoft.com/playwright:v1.60.0-jammy
+    profiles: ["test"]
+    depends_on:
+      app:
+        condition: service_healthy
+    environment:
+      BASE_URL: http://app:8080
+    working_dir: /work
+    volumes:
+      - .:/work
+    command: >
+      bash -c "npm ci && npx playwright test --project='Desktop Chrome'"
+
+  # Mobile test (iPhone 14 Pro Max emulation): docker compose run --rm mobile-test
+  mobile-test:
+    image: mcr.microsoft.com/playwright:v1.60.0-jammy
+    profiles: ["test"]
+    depends_on:
+      app:
+        condition: service_healthy
+    environment:
+      BASE_URL: http://app:8080
+    working_dir: /work
+    volumes:
+      - .:/work
+    command: >
+      bash -c "npm ci && npx playwright test --project='iPhone 14 Pro Max' --grep-invert 'Demo canvas'"

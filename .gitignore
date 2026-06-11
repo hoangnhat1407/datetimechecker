@@ -6,6 +6,7 @@ playwright-report/
 *.class
 *.jar
 generate-test-data.json
+HELP.md
 mobile_app/build/
 mobile_app/.dart_tool/
 mobile_app/.flutter-plugins

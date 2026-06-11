@@ -1,10 +1,13 @@
 const { defineConfig, devices } = require('@playwright/test');
 
+// Cho phép override khi chạy trong Docker (BASE_URL=http://app:8080)
+const baseURL = process.env.BASE_URL || 'http://localhost:8080';
+
 module.exports = defineConfig({
   testDir: './e2e',
   use: {
     headless: true,
-    baseURL: 'http://localhost:8080',
+    baseURL,
   },
   projects: [
     // Desktop

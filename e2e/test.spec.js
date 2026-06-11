@@ -1,13 +1,8 @@
 const { test, expect } = require('@playwright/test');
-const path = require('path');
-const fs = require('fs');
+const { testData } = require('./helpers/test-data');
 
-const BASE_URL = 'http://localhost:8080';
-
-// Đọc toàn bộ test case từ file dùng chung
-const testData = JSON.parse(
-  fs.readFileSync(path.join(__dirname, '..', 'test-data.json'), 'utf-8')
-);
+const VALID_COLOR = 'rgb(0, 128, 0)';   // green
+const INVALID_COLOR = 'rgb(255, 0, 0)'; // red
 
 async function checkDate(page, day, month, year) {
   await page.fill('#day', day);
@@ -23,13 +18,8 @@ async function checkDate(page, day, month, year) {
 
 for (const tc of testData) {
   test(tc.description, async ({ page }) => {
-    await page.goto(BASE_URL);
+    await page.goto('/');
     const result = await checkDate(page, tc.day, tc.month, tc.year);
-
-    if (tc.expectedValid) {
-      await expect(result).toHaveCSS('color', 'rgb(0, 128, 0)');
-    } else {
-      await expect(result).toHaveCSS('color', 'rgb(255, 0, 0)');
-    }
+    await expect(result).toHaveCSS('color', tc.expectedValid ? VALID_COLOR : INVALID_COLOR);
   });
 }

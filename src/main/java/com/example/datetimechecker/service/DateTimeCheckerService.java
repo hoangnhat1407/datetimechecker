@@ -4,100 +4,81 @@ import com.example.datetimechecker.dto.DateTimeRequest;
 import com.example.datetimechecker.dto.DateTimeResponse;
 import org.springframework.stereotype.Service;
 
+/**
+ * Validate ngày/tháng/năm nhập dạng chuỗi theo lịch Gregorian.
+ * Thứ tự kiểm tra: day → month → year (mỗi field: là số → trong range),
+ * cuối cùng mới kiểm tra ngày có tồn tại trong tháng/năm đó không.
+ */
 @Service
 public class DateTimeCheckerService {
 
-    // Số ngày tối đa của từng tháng (không tính năm nhuận)
+    // Số ngày tối đa của từng tháng, index 1-12 (không tính năm nhuận)
     private static final int[] DAYS_IN_MONTH = {
         0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
     };
 
     public DateTimeResponse check(DateTimeRequest request) {
-
-        // --- 1. Validate Day: phải là số nguyên ---
-        int day;
-        try {
-            day = Integer.parseInt(request.getDay().trim());
-        } catch (NumberFormatException e) {
-            return new DateTimeResponse(false,
-                "Day must be a number.", "day");
+        Integer day = tryParseInt(request.day());
+        if (day == null) {
+            return fieldError("day", "Day must be a number.");
         }
-
-        // --- 2. Validate Day: phải trong range 1-31 ---
         if (day < 1 || day > 31) {
-            return new DateTimeResponse(false,
-                "Day must be in range 1 to 31.", "day");
+            return fieldError("day", "Day must be in range 1 to 31.");
         }
 
-        // --- 3. Validate Month: phải là số nguyên ---
-        int month;
-        try {
-            month = Integer.parseInt(request.getMonth().trim());
-        } catch (NumberFormatException e) {
-            return new DateTimeResponse(false,
-                "Month must be a number.", "month");
+        Integer month = tryParseInt(request.month());
+        if (month == null) {
+            return fieldError("month", "Month must be a number.");
         }
-
-        // --- 4. Validate Month: phải trong range 1-12 ---
         if (month < 1 || month > 12) {
-            return new DateTimeResponse(false,
-                "Month must be in range 1 to 12.", "month");
+            return fieldError("month", "Month must be in range 1 to 12.");
         }
 
-        // --- 5. Validate Year: phải là số nguyên ---
-        int year;
-        try {
-            year = Integer.parseInt(request.getYear().trim());
-        } catch (NumberFormatException e) {
-            return new DateTimeResponse(false,
-                "Year must be a number.", "year");
+        Integer year = tryParseInt(request.year());
+        if (year == null) {
+            return fieldError("year", "Year must be a number.");
         }
-
-        // --- 6. Validate Year: phải trong range 1000-3000 ---
         if (year < 1000 || year > 3000) {
-            return new DateTimeResponse(false,
-                "Year must be in range 1000 to 3000.", "year");
+            return fieldError("year", "Year must be in range 1000 to 3000.");
         }
 
-        // --- 7. Check logic ngày hợp lệ (Gregorian calendar) ---
-        boolean isValid = isValidDate(day, month, year);
-        String dateStr = String.format("%02d/%02d/%04d", day, month, year);
-
-        if (isValid) {
-            return new DateTimeResponse(true,
-                dateStr + " is a valid date.");
-        } else {
-            return new DateTimeResponse(false,
-                dateStr + " is an invalid date.");
-        }
+        String date = String.format("%02d/%02d/%04d", day, month, year);
+        return isValidDate(day, month, year)
+            ? new DateTimeResponse(true, date + " is a valid date.")
+            : new DateTimeResponse(false, date + " is an invalid date.");
     }
 
     /**
-     * Kiểm tra ngày hợp lệ theo lịch Gregorian.
-     * Theo flowchart trong tài liệu:
-     * - Tháng 2: kiểm tra năm nhuận
-     * - Các tháng khác: kiểm tra số ngày tối đa
+     * Kiểm tra ngày tồn tại trong tháng/năm (day/month/year đã trong range hợp lệ).
+     * Tháng 2 phụ thuộc năm nhuận, các tháng khác theo DAYS_IN_MONTH.
      */
     public boolean isValidDate(int day, int month, int year) {
-        int maxDay;
-        if (month == 2) {
-            maxDay = isLeapYear(year) ? 29 : 28;
-        } else {
-            maxDay = DAYS_IN_MONTH[month];
-        }
+        int maxDay = (month == 2)
+            ? (isLeapYear(year) ? 29 : 28)
+            : DAYS_IN_MONTH[month];
         return day <= maxDay;
     }
 
     /**
-     * Kiểm tra năm nhuận theo lịch Gregorian:
-     * - Chia hết cho 400 → nhuận
-     * - Chia hết cho 100 nhưng không chia hết cho 400 → không nhuận
-     * - Chia hết cho 4 → nhuận
-     * - Còn lại → không nhuận
+     * Năm nhuận Gregorian: chia hết cho 4, trừ các năm chia hết cho 100
+     * mà không chia hết cho 400.
      */
     public boolean isLeapYear(int year) {
         if (year % 400 == 0) return true;
         if (year % 100 == 0) return false;
         return year % 4 == 0;
+    }
+
+    private static Integer tryParseInt(String raw) {
+        if (raw == null) return null;
+        try {
+            return Integer.parseInt(raw.trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private static DateTimeResponse fieldError(String field, String message) {
+        return new DateTimeResponse(false, message, field);
     }
 }

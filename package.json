@@ -4,7 +4,10 @@
   "description": "",
   "main": "playwright.config.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test:e2e": "playwright test --project=\"Desktop Chrome\"",
+    "test:mobile": "playwright test --project=\"iPhone 14 Pro Max\" --grep-invert \"Demo canvas\"",
+    "test:mobile:demo": "playwright test --project=\"iPhone 14 Pro Max\" -g \"Demo canvas\" --headed --workers=1",
+    "generate:test-data": "node generate-test-data.js"
   },
   "repository": {
     "type": "git",

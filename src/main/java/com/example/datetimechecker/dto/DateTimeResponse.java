@@ -1,22 +1,11 @@
 package com.example.datetimechecker.dto;
 
-public class DateTimeResponse {
-    private boolean valid;
-    private String message;
-    private String field;   // null nếu không lỗi
+/**
+ * @param field tên field gây lỗi (day/month/year), null nếu không lỗi field cụ thể
+ */
+public record DateTimeResponse(boolean valid, String message, String field) {
 
     public DateTimeResponse(boolean valid, String message) {
-        this.valid = valid;
-        this.message = message;
+        this(valid, message, null);
     }
-
-    public DateTimeResponse(boolean valid, String message, String field) {
-        this.valid = valid;
-        this.message = message;
-        this.field = field;
-    }
-
-    public boolean isValid() { return valid; }
-    public String getMessage() { return message; }
-    public String getField() { return field; }
 }

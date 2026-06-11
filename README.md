@@ -12,6 +12,28 @@ Spring Boot REST API kiểm tra ngày/tháng/năm hợp lệ theo lịch Gregori
 
 Truy cập giao diện: http://localhost:8080
 
+### Chạy bằng Docker
+
+Dockerfile build multi-stage (Maven build ngay trong Docker, không cần JDK trên máy):
+
+```bash
+docker compose up --build app
+# hoặc: docker build -t datetimechecker . && docker run -p 8080:8080 datetimechecker
+```
+
+### Mobile testing bằng Docker
+
+`docker-compose.yml` có sẵn 2 service test dùng image Playwright chính thức,
+tự chờ app healthy rồi chạy test qua `BASE_URL=http://app:8080`:
+
+```bash
+# E2E desktop (Desktop Chrome, 57 case)
+docker compose run --rm e2e-test
+
+# Mobile (iPhone 14 Pro Max emulation, bỏ nhóm Demo canvas)
+docker compose run --rm mobile-test
+```
+
 ---
 
 ## API
@@ -195,6 +217,7 @@ datetimechecker/
 ├── mobile_app/                             ← Flutter Web mobile app (source)
 │   └── lib/main.dart
 ├── e2e/
+│   ├── helpers/test-data.js               ← loader test-data.json dùng chung cho các spec
 │   ├── test.spec.js                       ← Playwright E2E tests (Desktop Chrome)
 │   └── mobile.spec.js                     ← Playwright mobile tests (iPhone 14 Pro Max)
 ├── maestro/
@@ -203,6 +226,8 @@ datetimechecker/
 │   └── load-test.js                       ← k6 load tests
 ├── .github/workflows/
 │   └── api-test.yml                       ← CI/CD pipeline
+├── Dockerfile                             ← multi-stage build (Maven → JRE)
+├── docker-compose.yml                     ← app + e2e-test + mobile-test (Playwright)
 ├── DateTimeChecker API.postman_collection.json
 ├── generate-test-data.js                  ← sinh test-data.json
 ├── test-data.json
