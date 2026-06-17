@@ -60,6 +60,21 @@ public class DateTimeCheckerService {
     }
 
     /**
+     * Trả về số ngày của một tháng trong năm.
+     * Tháng không hợp lệ (null hoặc ngoài range 1..12) trả về 0.
+     * Tháng 2 phụ thuộc năm nhuận (28/29), các tháng khác theo DAYS_IN_MONTH.
+     */
+    public int dayInMonth(Integer month, int year) {
+        if (month == null || month < 1 || month > 12) {
+            return 0;
+        }
+        if (month == 2) {
+            return isLeapYear(year) ? 29 : 28;
+        }
+        return DAYS_IN_MONTH[month];
+    }
+
+    /**
      * Năm nhuận Gregorian: chia hết cho 4, trừ các năm chia hết cho 100
      * mà không chia hết cho 400.
      */

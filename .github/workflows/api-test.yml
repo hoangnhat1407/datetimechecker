@@ -13,10 +13,27 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Run Unit Tests
+      - name: Run Unit Tests (gồm DayInMonth UTCID01..UTCID15)
         run: |
           chmod +x mvnw
-          ./mvnw test
+          ./mvnw test | tee mvn-test.log
+      - name: Publish DayInMonth report to job summary
+        if: always()
+        run: |
+          {
+            echo "## Unit Test Report — DayInMonth (UTCID01..UTCID15)"
+            echo ""
+            echo '```'
+            sed -n '/UNIT TEST REPORT: DayInMonth/,/^Total:/p' mvn-test.log || echo "report not found"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload Surefire reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: target/surefire-reports/
+          if-no-files-found: warn
 
   api-test:
     runs-on: ubuntu-latest
