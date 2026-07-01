@@ -33,4 +33,4 @@ services:
     volumes:
       - .:/work
     command: >
-      bash -c "npm ci && npx playwright test --project='iPhone 14 Pro Max' --grep-invert 'Demo canvas'"
+      bash -c "npm ci && npx playwright test --config='Topic 4-mobile testing/playwright.mobile.config.js' --project='iPhone 14 Pro Max' --grep-invert 'Demo canvas'"

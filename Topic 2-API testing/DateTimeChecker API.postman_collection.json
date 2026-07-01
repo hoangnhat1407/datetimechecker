@@ -1,0 +1,123 @@
+{
+  "info": {
+    "_postman_id": "1d16f29a-2a2b-4175-b161-d16e9e8caf2a",
+    "name": "DateTimeChecker API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54217860",
+    "_collection_link": "https://go.postman.co/collection/54217860-1d16f29a-2a2b-4175-b161-d16e9e8caf2a?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "datetimecheck",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const desc = pm.iterationData.get(\"description\") || \"\";\r",
+              "\r",
+              "pm.test(`[${desc}] Status 200`, () => pm.response.to.have.status(200));\r",
+              "\r",
+              "pm.test(`[${desc}] valid matches expected`, () => {\r",
+              "    const json = pm.response.json();\r",
+              "    const expected = pm.iterationData.get(\"expectedValid\");\r",
+              "    pm.expect(json.valid).to.eql(expected);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "packages": {},
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"day\":   \"{{day}}\",\r\n  \"month\": \"{{month}}\",\r\n  \"year\":  \"{{year}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/datetime/check",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "datetime",
+            "check"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "datetimecheck-get",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const desc = pm.iterationData.get(\"description\") || \"GET sample\";\r",
+              "\r",
+              "pm.test(`[${desc}] GET status 200`, () => pm.response.to.have.status(200));\r",
+              "\r",
+              "pm.test(`[${desc}] GET returns expected data`, () => {\r",
+              "    const json = pm.response.json();\r",
+              "    const expected = pm.iterationData.get(\"expectedValid\");\r",
+              "    pm.expect(json).to.have.property(\"valid\");\r",
+              "    pm.expect(json).to.have.property(\"message\");\r",
+              "    pm.expect(json.valid).to.eql(expected);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/datetime/check?day={{day}}&month={{month}}&year={{year}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "datetime",
+            "check"
+          ],
+          "query": [
+            {
+              "key": "day",
+              "value": "{{day}}"
+            },
+            {
+              "key": "month",
+              "value": "{{month}}"
+            },
+            {
+              "key": "year",
+              "value": "{{year}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

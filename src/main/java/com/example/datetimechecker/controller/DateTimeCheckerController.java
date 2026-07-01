@@ -28,6 +28,19 @@ public class DateTimeCheckerController {
     }
 
     /**
+     * GET /api/datetime/check?day=29&month=2&year=2000
+     */
+    @GetMapping("/check")
+    public ResponseEntity<DateTimeResponse> checkByQuery(
+            @RequestParam String day,
+            @RequestParam String month,
+            @RequestParam String year
+    ) {
+        DateTimeResponse response = service.check(new DateTimeRequest(day, month, year));
+        return ResponseEntity.ok(response);
+    }
+
+    /**
      * POST /api/datetime/clear
      * Stateless app nên chỉ trả thông báo clear thành công
      */

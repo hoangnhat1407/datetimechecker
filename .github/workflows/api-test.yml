@@ -63,7 +63,7 @@ jobs:
       - name: Install Newman
         run: npm install -g newman
       - name: Run API Tests
-        run: newman run "DateTimeChecker API.postman_collection.json" --iteration-data test-data.json --env-var "baseUrl=http://localhost:8080"
+        run: newman run "Topic 2-API testing/DateTimeChecker API.postman_collection.json" --iteration-data test-data.json --env-var "baseUrl=http://localhost:8080"
 
   e2e-test:
     runs-on: ubuntu-latest
@@ -131,7 +131,7 @@ jobs:
       - name: Run Mobile Tests
         # Bỏ qua [Demo canvas]: chỉ phục vụ demo trực quan (waitForTimeout dài),
         # tính đúng/sai đã được nhóm [Mobile] xác thực qua mobile context.
-        run: ./node_modules/.bin/playwright test --project="iPhone 14 Pro Max" --grep-invert "Demo canvas"
+        run: ./node_modules/.bin/playwright test --config="Topic 4-mobile testing/playwright.mobile.config.js" --project="iPhone 14 Pro Max" --grep-invert "Demo canvas"
 
   k6-test:
     runs-on: ubuntu-latest
@@ -166,3 +166,70 @@ jobs:
           sudo apt-get install k6
       - name: Run k6 Load Test
         run: k6 run k6/load-test.js
+
+  cicd-report:
+    runs-on: ubuntu-latest
+    needs: [unit-test, api-test, e2e-test, mobile-test, k6-test]
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate CI/CD report
+        run: |
+          mkdir -p "Topic 3-CICD"
+
+          UNIT_RESULT="${{ needs.unit-test.result }}"
+          API_RESULT="${{ needs.api-test.result }}"
+          E2E_RESULT="${{ needs.e2e-test.result }}"
+          MOBILE_RESULT="${{ needs.mobile-test.result }}"
+          K6_RESULT="${{ needs.k6-test.result }}"
+          OVERALL_RESULT="PASS"
+
+          if [ "$UNIT_RESULT" != "success" ] || [ "$API_RESULT" != "success" ] || [ "$E2E_RESULT" != "success" ] || [ "$MOBILE_RESULT" != "success" ] || [ "$K6_RESULT" != "success" ]; then
+            OVERALL_RESULT="FAIL"
+          fi
+
+          cat > "Topic 3-CICD/CICD_REPORT.md" <<EOF
+          # CI/CD Report - DateTimeChecker
+
+          ## Summary
+
+          - Overall result: $OVERALL_RESULT
+          - Workflow: ${{ github.workflow }}
+          - Branch: ${{ github.ref_name }}
+          - Commit: ${{ github.sha }}
+          - Triggered by: ${{ github.actor }}
+          - Run number: ${{ github.run_number }}
+          - Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          ## Job Results
+
+          | Job | Result |
+          | --- | --- |
+          | Unit Test | $UNIT_RESULT |
+          | API Test | $API_RESULT |
+          | E2E Test | $E2E_RESULT |
+          | Mobile Test | $MOBILE_RESULT |
+          | k6 Performance Test | $K6_RESULT |
+
+          ## Reports and Logs
+
+          - Open the GitHub Actions run URL above to view all logs.
+          - Download the \`surefire-reports\` artifact for detailed Maven/JUnit test XML reports.
+          - Download the \`cicd-report\` artifact for this markdown report.
+
+          ## Demo Note
+
+          This report is generated after all CI/CD jobs finish. It is intended for Topic 3 CI/CD demo reporting.
+          EOF
+
+          sed -i 's/^          //' "Topic 3-CICD/CICD_REPORT.md"
+          cat "Topic 3-CICD/CICD_REPORT.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload CI/CD report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cicd-report
+          path: Topic 3-CICD/CICD_REPORT.md
+          if-no-files-found: error

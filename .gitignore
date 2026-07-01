@@ -2,6 +2,12 @@ target/
 node_modules/
 test-results/
 playwright-report/
+Topic 7/.env.local
+Topic 7/test-results/
+Topic 7/playwright-report/
+Topic 7-AI assisted and e2e testing/.env.local
+Topic 7-AI assisted and e2e testing/test-results/
+Topic 7-AI assisted and e2e testing/playwright-report/
 .idea/
 *.class
 *.jar
@@ -11,3 +17,9 @@ mobile_app/build/
 mobile_app/.dart_tool/
 mobile_app/.flutter-plugins
 mobile_app/.flutter-plugins-dependencies
+Topic 4-mobile testing/mobile-test-server*.log
+Topic 4-mobile testing/mobile-web-server*.log
+Topic 4-mobile testing/mobile_app/build/
+Topic 4-mobile testing/mobile_app/.dart_tool/
+Topic 4-mobile testing/mobile_app/.flutter-plugins
+Topic 4-mobile testing/mobile_app/.flutter-plugins-dependencies

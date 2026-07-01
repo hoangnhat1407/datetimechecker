@@ -1,0 +1,184 @@
+============================================================
+Topic 5 - Performance Testing Demo with k6
+Project: DateTimeChecker
+Run ID: run-20260702-001745
+Report folder: D:\FPT Uni\datetimechecker\Topic 5\reports\run-20260702-001745
+Target API: http://localhost:18081/api/datetime/check
+============================================================
+ECHO is off.
+[INFO] Environment information
+[INFO] k6 path:
+C:\Program Files\k6\k6.exe
+[INFO] Java version:
+java version "21.0.10" 2026-01-20 LTS
+Java(TM) SE Runtime Environment (build 21.0.10+8-LTS-217)
+Java HotSpot(TM) 64-Bit Server VM (build 21.0.10+8-LTS-217, mixed mode, sharing)
+ECHO is off.
+[INFO] Spring Boot app is already running.
+[INFO] DateTimeChecker API is ready.
+ECHO is off.
+[INFO] Running k6 load test...
+[INFO] Test data: D:\FPT Uni\datetimechecker\Topic 5\test-data.json
+[INFO] k6 script: D:\FPT Uni\datetimechecker\Topic 5\load-test.js
+[INFO] Target: http://localhost:18081/api/datetime/check
+[INFO] - Main log: D:\FPT Uni\datetimechecker\Topic 5\reports\run-20260702-001745\run.log
+ECHO is off.
+[INFO] - k6 JSON summary: D:\FPT Uni\datetimechecker\Topic 5\reports\run-20260702-001745\k6-summary.json
+ECHO is off.
+Close the app using port 18081, then run this file again.
+ECHO is off.
+ECHO is off.
+time="2026-07-02T00:17:46+07:00" level=error msg="The moduleSpecifier \"load-test.js\" couldn't be found on local disk. Make sure that you've specified the right path to the file. If you're running k6 using the Docker image make sure you have mounted the local directory (-v /local/path/:/inside/docker/path) containing your script and modules so that they're accessible by k6 from inside of the container, see https://grafana.com/docs/k6/latest/using-k6/modules/#use-modules-with-docker."
+ECHO is off.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
+[FAILED] k6 performance test failed. Check the k6 summary above.
