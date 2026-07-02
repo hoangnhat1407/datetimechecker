@@ -6,13 +6,9 @@ const INVALID_COLOR = 'rgb(255, 0, 0)'; // red
 
 async function checkDate(page, day, month, year) {
   await page.fill('#day', day);
-  await page.waitForTimeout(500);
   await page.fill('#month', month);
-  await page.waitForTimeout(500);
   await page.fill('#year', year);
-  await page.waitForTimeout(500);
   await page.click('button');
-  await page.waitForTimeout(500);
   return page.locator('#result');
 }
 

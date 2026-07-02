@@ -4,9 +4,12 @@ const baseURL = process.env.BASE_URL || 'http://localhost:8080';
 
 module.exports = defineConfig({
   testDir: './e2e',
+  fullyParallel: true,
   use: {
     headless: true,
     baseURL,
+    actionTimeout: 5000,
+    navigationTimeout: 10000,
   },
   projects: [
     {
