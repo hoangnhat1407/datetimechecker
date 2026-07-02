@@ -4,11 +4,14 @@ Double-click `run.bat` to run visual regression testing.
 
 What the runner does:
 
+- Syncs your current `src/main/resources/static` files into the runtime before testing.
 - Starts the Spring Boot app on a free local port.
 - Installs npm dependencies and Playwright Chromium if they are missing.
 - Creates baseline screenshots automatically on the first run.
 - Captures current screenshots on every run.
 - Compares the current UI against the baseline.
+- Reports visual differences without changing your source code back.
+- Keeps Playwright's full output in `run.log` and prints a short summary to the console.
 
 Image folders:
 

@@ -239,6 +239,8 @@ Output rules:
   async function observeStep(page) { if (STEP_DELAY_MS > 0) await page.waitForTimeout(STEP_DELAY_MS); }
 - Call observeStep(page) after page.goto('/'), after each fill, and after clicking Check so humans can watch the browser.
 - Add self-healing locator helpers. Primary locators are #day, #month, #year, the Check button, and #result. If a primary locator fails, try fallback locators by placeholder, label, role, name, text, and input index.
+- When self-healing is disabled, fail fast with a clear strict-locator error instead of waiting for the default Playwright timeout.
+- When self-healing is enabled, include id-contains, placeholder, label, name, aria-label, and input-index fallback locators.
 - Track healed locator events and include selfHealedLocators plus healedLocators in each result object.
 - In each test, push { id, title, testType, day, month, year, expectedStatus: "VALID" or "INVALID", selfHealedLocators, healedLocators, result: "SUCCEED" } after assertions pass.
 - If an assertion fails, catch the error, push { id, title, testType, day, month, year, expectedStatus, selfHealedLocators, healedLocators, result: "FAILED", error: error.message }, then rethrow.
@@ -847,6 +849,7 @@ async function executeApprovedSuite(request, suite, opts, rl = null) {
   const specOut = await generateSpecFromSuite(request, suite, executionOpts);
   let serverProcess = null;
   try {
+    compileProjectResources();
     serverProcess = await ensureServer(executionOpts.baseUrl);
     console.log(color('[STEP 3] Running Playwright E2E tests. Chromium will open if headed mode is available...', 'yellow'));
     console.log(color(`[E2E SPEED] Step delay: ${executionOpts.stepDelayMs}ms. Set AI_TEST_STEP_DELAY_MS=0 to run fast.`, 'yellow'));
@@ -873,6 +876,28 @@ async function executeApprovedSuite(request, suite, opts, rl = null) {
       console.log(color('[SERVER] Stopped local server started by ai-test.', 'dim'));
     }
   }
+}
+
+function compileProjectResources() {
+  console.log(color('[BUILD] Refreshing Java resources before E2E run...', 'yellow'));
+  const result = process.platform === 'win32'
+    ? spawnSync('cmd.exe', ['/d', '/s', '/c', 'mvnw.cmd compile'], {
+      cwd: ROOT,
+      encoding: 'utf8',
+      env: process.env,
+    })
+    : spawnSync('./mvnw', ['compile'], {
+      cwd: ROOT,
+      encoding: 'utf8',
+      env: process.env,
+    });
+
+  if (result.error) throw result.error;
+  if (result.status !== 0) {
+    const output = `${result.stdout || ''}${result.stderr || ''}`.trim();
+    throw new Error(`mvnw compile failed before E2E run.${output ? `\n${output}` : ''}`);
+  }
+  console.log(color('[BUILD] Resources refreshed.', 'green'));
 }
 
 function printAssistedSummary() {
@@ -914,6 +939,7 @@ function renderAssistedSummary(results, colorize) {
   let succeed = 0;
   let failed = 0;
   let selfHealedLocators = 0;
+  let firstFailure = null;
 
   rows.push(colorize ? color('[AI TEST SUMMARY]', 'cyan') : '[AI TEST SUMMARY]');
   rows.push(divider);
@@ -930,7 +956,10 @@ function renderAssistedSummary(results, colorize) {
   for (const item of results) {
     const passed = item.result === 'SUCCEED';
     if (passed) succeed += 1;
-    else failed += 1;
+    else {
+      failed += 1;
+      if (!firstFailure) firstFailure = item;
+    }
     selfHealedLocators += Number(item.selfHealedLocators || 0);
 
     const expected = item.expectedStatus === 'VALID' ? 'VALID' : 'INVALID';
@@ -952,6 +981,14 @@ function renderAssistedSummary(results, colorize) {
   rows.push(divider);
   rows.push(`Total Tests: ${results.length} | Passed: ${succeed} | Failed: ${failed}`);
   rows.push(`Self-Healed Locators: ${selfHealedLocators}`);
+  const healingDetails = uniqueHealingDetails(results);
+  if (healingDetails.length > 0) {
+    const shown = healingDetails.slice(0, 3).join(' | ');
+    rows.push(`Healing: ${shown}${healingDetails.length > 3 ? ` | +${healingDetails.length - 3} more` : ''}`);
+  }
+  if (firstFailure && firstFailure.error) {
+    rows.push(`First Failure: ${fitCell(firstFailure.id + ' ' + compactError(firstFailure.error), totalWidth - 15)}`);
+  }
   rows.push(colorize
     ? color(`Overall: ${failed === 0 ? 'SUCCEED' : 'FAILED'}`, failed === 0 ? 'green' : 'red')
     : `Overall: ${failed === 0 ? 'SUCCEED' : 'FAILED'}`);
@@ -977,6 +1014,30 @@ function inferTestType(title = '') {
   if (/invalid|incorrect|format|non|blank|empty|special|decimal|error/i.test(title)) return 'Error Guessing';
   if (/leap|month|standard|valid|calendar/i.test(title)) return 'Equivalence Partition';
   return 'AI Generated';
+}
+
+function uniqueHealingDetails(results) {
+  const seen = new Set();
+  const details = [];
+
+  for (const item of results) {
+    for (const event of item.healedLocators || []) {
+      const text = `${item.id || 'TC??'} ${event.purpose}: ${event.from} -> ${event.to}`;
+      if (!seen.has(text)) {
+        seen.add(text);
+        details.push(text);
+      }
+    }
+  }
+
+  return details;
+}
+
+function compactError(error) {
+  return String(error || '')
+    .replace(/\s+/g, ' ')
+    .replace(/Call log:.*/i, '')
+    .trim();
 }
 
 function toAssistedCsv(results) {
@@ -1176,6 +1237,9 @@ const resultsPath = path.join(process.cwd(), '${ASSISTED_JSON.replace(/\\/g, '/'
 const results = [];
 const STEP_DELAY_MS = Number(process.env.AI_TEST_STEP_DELAY_MS || '${DEFAULT_ASSISTED_STEP_DELAY_MS}');
 const SELF_HEAL_LOCATORS = !/^(0|false|no|off)$/i.test(String(process.env.AI_TEST_SELF_HEAL || '1'));
+const STRICT_LOCATOR_TIMEOUT_MS = Number(process.env.AI_TEST_STRICT_LOCATOR_TIMEOUT_MS || '1200');
+const HEAL_LOCATOR_TIMEOUT_MS = Number(process.env.AI_TEST_HEAL_LOCATOR_TIMEOUT_MS || '350');
+const RESULT_LOCATOR_TIMEOUT_MS = Number(process.env.AI_TEST_RESULT_LOCATOR_TIMEOUT_MS || '3000');
 const healEvents = [];
 
 const testCases = ${JSON.stringify(cases, null, 2)};
@@ -1195,6 +1259,8 @@ async function observeStep(page) {
 function inputCandidates(page, field, label, index) {
   return [
     { name: '#' + field, locator: page.locator('#' + field) },
+    { name: 'id contains ' + field, locator: page.locator('input[id*="' + field + '"]') },
+    { name: 'css placeholder ' + label, locator: page.locator('input[placeholder="' + label + '"]') },
     { name: 'placeholder ' + label, locator: page.getByPlaceholder(new RegExp('^' + label + '$', 'i')) },
     { name: 'label ' + label, locator: page.getByLabel(new RegExp('^' + label + '$', 'i')) },
     { name: 'name=' + field, locator: page.locator('input[name="' + field + '"], input[name="' + label + '"]') },
@@ -1220,18 +1286,36 @@ function resultCandidates(page) {
   ];
 }
 
+async function findVisibleCandidate(candidate, timeoutMs) {
+  const locator = candidate.locator.first();
+  if (await locator.count() === 0) return null;
+  await locator.waitFor({ state: 'visible', timeout: timeoutMs });
+  return locator;
+}
+
+function timeoutForPurpose(purpose, strictMode) {
+  if (/result output/i.test(purpose)) return RESULT_LOCATOR_TIMEOUT_MS;
+  return strictMode ? STRICT_LOCATOR_TIMEOUT_MS : HEAL_LOCATOR_TIMEOUT_MS;
+}
+
 async function healLocator(page, purpose, candidates) {
   const primary = candidates[0];
   if (!SELF_HEAL_LOCATORS) {
-    return primary.locator.first();
+    try {
+      const locator = await findVisibleCandidate(primary, timeoutForPurpose(purpose, true));
+      if (locator) return locator;
+    } catch {
+      // Strict mode intentionally does not try fallback locators.
+    }
+    const fallbackNames = candidates.slice(1).map((candidate) => candidate.name).join(', ');
+    throw new Error('[STRICT LOCATOR] ' + purpose + ' was not found with ' + primary.name + '. Enable AI Self-Healing Locator Recovery to try: ' + fallbackNames);
   }
 
   for (let index = 0; index < candidates.length; index += 1) {
     const candidate = candidates[index];
     try {
-      const locator = candidate.locator.first();
-      if (await locator.count() === 0) continue;
-      await locator.waitFor({ state: 'visible', timeout: index === 0 ? 700 : 350 });
+      const locator = await findVisibleCandidate(candidate, timeoutForPurpose(purpose, false));
+      if (!locator) continue;
       if (index > 0) {
         healEvents.push({
           purpose,
@@ -1245,7 +1329,8 @@ async function healLocator(page, purpose, candidates) {
     }
   }
 
-  return primary.locator.first();
+  const tried = candidates.map((candidate) => candidate.name).join(', ');
+  throw new Error('[SELF-HEAL FAILED] ' + purpose + ' was not found. Tried: ' + tried);
 }
 
 test.describe('AI-assisted DateTimeChecker E2E Suite', () => {

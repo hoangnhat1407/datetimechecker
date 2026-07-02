@@ -37,7 +37,7 @@ async function captureAndCompare(page, fileName) {
   await expect(page).toHaveScreenshot(fileName, {
     fullPage: true,
     animations: 'disabled',
-    maxDiffPixelRatio: 0.01,
+    maxDiffPixels: 10,
   });
 }
 

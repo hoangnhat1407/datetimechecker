@@ -7,6 +7,7 @@ set "SCRIPT_DIR=%~dp0"
 for %%I in ("%SCRIPT_DIR%..") do set "PROJECT_DIR=%%~fI"
 set "NOTE_FILE=Topic 3-CICD\DEMO_CI_NOTE.md"
 set "ACTIONS_URL=https://github.com/nhatnhm1405/datetimechecker/actions"
+set "REMOTE_NAME=cicd-demo"
 
 pushd "%PROJECT_DIR%"
 
@@ -41,6 +42,42 @@ if /I not "%CURRENT_BRANCH%"=="%TARGET_BRANCH%" (
     echo.
     echo Run this first, then double-click run.bat again:
     echo   git switch %TARGET_BRANCH%
+    echo.
+    pause
+    popd
+    exit /b 1
+)
+
+git remote get-url "%REMOTE_NAME%" >nul 2>&1
+if errorlevel 1 (
+    set "REMOTE_NAME=origin"
+)
+
+for /f "delims=" %%R in ('git remote get-url "%REMOTE_NAME%" 2^>nul') do set "REMOTE_URL=%%R"
+
+if "%REMOTE_URL%"=="" (
+    echo ERROR: Could not read Git remote "%REMOTE_NAME%".
+    echo.
+    pause
+    popd
+    exit /b 1
+)
+
+echo Current branch : %CURRENT_BRANCH%
+echo Target remote  : %REMOTE_NAME%
+echo Remote URL     : %REMOTE_URL%
+echo Target push    : %REMOTE_NAME%/%CURRENT_BRANCH%
+echo.
+echo [preflight] Checking whether this Git account can push to the target branch...
+git push --dry-run -u "%REMOTE_NAME%" "%CURRENT_BRANCH%"
+if errorlevel 1 (
+    echo.
+    echo ERROR: Push permission check failed.
+    echo The current Git/GitHub credential cannot push to:
+    echo   %REMOTE_URL%
+    echo.
+    echo Fix GitHub login/token/permission first, then run this file again.
+    echo No new CI demo commit was created by this run.
     echo.
     pause
     popd
@@ -90,7 +127,7 @@ if errorlevel 1 (
 )
 
 echo [4/4] Pushing to GitHub...
-git push -u origin "%CURRENT_BRANCH%"
+git push -u "%REMOTE_NAME%" "%CURRENT_BRANCH%"
 if errorlevel 1 (
     echo ERROR: git push failed.
     echo Check GitHub login/token/network access, then run again.

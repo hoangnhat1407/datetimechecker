@@ -1,17 +1,20 @@
 // Generated from an approved AI-assisted test suite.
 // Source command: npm run ai-test
 // Model: gemini-3.1-flash-lite
-// Generated at: 2026-07-01T17:17:10.922Z
+// Generated at: 2026-07-02T01:14:05.299Z
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
 
 const VALID_COLOR = 'rgb(0, 128, 0)';
 const INVALID_COLOR = 'rgb(255, 0, 0)';
-const resultsPath = path.join(process.cwd(), 'test-results/ai-assisted-results.json');
+const resultsPath = path.join(process.cwd(), 'Topic 7-AI assisted and e2e testing/test-results/ai-assisted-results.json');
 const results = [];
 const STEP_DELAY_MS = Number(process.env.AI_TEST_STEP_DELAY_MS || '900');
 const SELF_HEAL_LOCATORS = !/^(0|false|no|off)$/i.test(String(process.env.AI_TEST_SELF_HEAL || '1'));
+const STRICT_LOCATOR_TIMEOUT_MS = Number(process.env.AI_TEST_STRICT_LOCATOR_TIMEOUT_MS || '1200');
+const HEAL_LOCATOR_TIMEOUT_MS = Number(process.env.AI_TEST_HEAL_LOCATOR_TIMEOUT_MS || '350');
+const RESULT_LOCATOR_TIMEOUT_MS = Number(process.env.AI_TEST_RESULT_LOCATOR_TIMEOUT_MS || '3000');
 const healEvents = [];
 
 const testCases = [
@@ -20,13 +23,13 @@ const testCases = [
     "title": "Valid standard date",
     "testType": "EP",
     "day": "15",
-    "month": "05",
+    "month": "06",
     "year": "2023",
     "expectedStatus": "VALID"
   },
   {
     "id": "TC02",
-    "title": "Leap year February 29",
+    "title": "Leap year February 29th",
     "testType": "BVA",
     "day": "29",
     "month": "02",
@@ -35,7 +38,7 @@ const testCases = [
   },
   {
     "id": "TC03",
-    "title": "Non-leap year February 29",
+    "title": "Non-leap year February 29th",
     "testType": "BVA",
     "day": "29",
     "month": "02",
@@ -44,16 +47,7 @@ const testCases = [
   },
   {
     "id": "TC04",
-    "title": "Invalid month boundary",
-    "testType": "BVA",
-    "day": "01",
-    "month": "13",
-    "year": "2023",
-    "expectedStatus": "INVALID"
-  },
-  {
-    "id": "TC05",
-    "title": "Year below minimum",
+    "title": "Out of range year",
     "testType": "BVA",
     "day": "01",
     "month": "01",
@@ -61,12 +55,12 @@ const testCases = [
     "expectedStatus": "INVALID"
   },
   {
-    "id": "TC06",
-    "title": "Invalid day for month",
+    "id": "TC05",
+    "title": "Invalid month value",
     "testType": "Error Guessing",
-    "day": "31",
-    "month": "04",
-    "year": "2023",
+    "day": "10",
+    "month": "13",
+    "year": "2020",
     "expectedStatus": "INVALID"
   }
 ];
@@ -86,6 +80,8 @@ async function observeStep(page) {
 function inputCandidates(page, field, label, index) {
   return [
     { name: '#' + field, locator: page.locator('#' + field) },
+    { name: 'id contains ' + field, locator: page.locator('input[id*="' + field + '"]') },
+    { name: 'css placeholder ' + label, locator: page.locator('input[placeholder="' + label + '"]') },
     { name: 'placeholder ' + label, locator: page.getByPlaceholder(new RegExp('^' + label + '$', 'i')) },
     { name: 'label ' + label, locator: page.getByLabel(new RegExp('^' + label + '$', 'i')) },
     { name: 'name=' + field, locator: page.locator('input[name="' + field + '"], input[name="' + label + '"]') },
@@ -111,18 +107,36 @@ function resultCandidates(page) {
   ];
 }
 
+async function findVisibleCandidate(candidate, timeoutMs) {
+  const locator = candidate.locator.first();
+  if (await locator.count() === 0) return null;
+  await locator.waitFor({ state: 'visible', timeout: timeoutMs });
+  return locator;
+}
+
+function timeoutForPurpose(purpose, strictMode) {
+  if (/result output/i.test(purpose)) return RESULT_LOCATOR_TIMEOUT_MS;
+  return strictMode ? STRICT_LOCATOR_TIMEOUT_MS : HEAL_LOCATOR_TIMEOUT_MS;
+}
+
 async function healLocator(page, purpose, candidates) {
   const primary = candidates[0];
   if (!SELF_HEAL_LOCATORS) {
-    return primary.locator.first();
+    try {
+      const locator = await findVisibleCandidate(primary, timeoutForPurpose(purpose, true));
+      if (locator) return locator;
+    } catch {
+      // Strict mode intentionally does not try fallback locators.
+    }
+    const fallbackNames = candidates.slice(1).map((candidate) => candidate.name).join(', ');
+    throw new Error('[STRICT LOCATOR] ' + purpose + ' was not found with ' + primary.name + '. Enable AI Self-Healing Locator Recovery to try: ' + fallbackNames);
   }
 
   for (let index = 0; index < candidates.length; index += 1) {
     const candidate = candidates[index];
     try {
-      const locator = candidate.locator.first();
-      if (await locator.count() === 0) continue;
-      await locator.waitFor({ state: 'visible', timeout: index === 0 ? 700 : 350 });
+      const locator = await findVisibleCandidate(candidate, timeoutForPurpose(purpose, false));
+      if (!locator) continue;
       if (index > 0) {
         healEvents.push({
           purpose,
@@ -136,7 +150,8 @@ async function healLocator(page, purpose, candidates) {
     }
   }
 
-  return primary.locator.first();
+  const tried = candidates.map((candidate) => candidate.name).join(', ');
+  throw new Error('[SELF-HEAL FAILED] ' + purpose + ' was not found. Tried: ' + tried);
 }
 
 test.describe('AI-assisted DateTimeChecker E2E Suite', () => {

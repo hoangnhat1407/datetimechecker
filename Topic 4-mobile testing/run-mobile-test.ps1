@@ -1,8 +1,13 @@
+param(
+  [switch] $Demo
+)
+
 $ErrorActionPreference = 'Stop'
 
 $topicDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $rootDir = (Resolve-Path (Join-Path $topicDir '..')).Path
 $configPath = Join-Path $topicDir 'playwright.mobile.config.js'
+$demoConfigPath = Join-Path $topicDir 'playwright.mobile.demo.config.js'
 $serverLog = Join-Path $topicDir 'mobile-test-server.log'
 $serverErrorLog = Join-Path $topicDir 'mobile-test-server.err.log'
 $serverProcess = $null
@@ -151,9 +156,16 @@ try {
     Write-Host "==> Spring Boot server is already running on $baseUrl"
   }
 
-  Invoke-Step 'Running mobile Playwright tests' {
-    $env:BASE_URL = $baseUrl
-    npx.cmd playwright test --config "$configPath" --project 'iPhone 14 Pro Max' --grep-invert 'Demo canvas'
+  if ($Demo) {
+    Invoke-Step 'Running visible mobile phone demo' {
+      $env:BASE_URL = $baseUrl
+      npx.cmd playwright test --config "$demoConfigPath" --project 'iPhone 14 Pro Max Demo' -g 'Phone demo' --workers=1
+    }
+  } else {
+    Invoke-Step 'Running mobile Playwright tests' {
+      $env:BASE_URL = $baseUrl
+      npx.cmd playwright test --config "$configPath" --project 'iPhone 14 Pro Max' --grep-invert 'Demo canvas'
+    }
   }
 } finally {
   if ($serverProcess -and -not $serverProcess.HasExited) {

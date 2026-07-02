@@ -53,6 +53,12 @@ test.describe('Mobile - Flutter Web (DateTimeChecker)', () => {
 
   // Demo nhập liệu trực tiếp trên canvas Flutter - cùng bộ dữ liệu
   // được sinh ra từ generate-test-data.js -> test-data.json
+  test('[Demo canvas] [Phone demo] visible valid date flow', async ({ page }) => {
+    test.setTimeout(60000);
+    await fillAndCheckOnCanvas(page, '15', '6', '2000');
+    await page.screenshot({ path: 'test-results/mobile-phone-demo-valid-date.png' });
+  });
+
   for (const tc of mobileTestCases) {
     test(`[Demo canvas] ${tc.description}`, async ({ page }) => {
       test.setTimeout(60000); // thao tác canvas + load lại app mỗi case khá chậm khi chạy tuần tự

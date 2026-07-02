@@ -52,6 +52,14 @@ Topic 4-mobile testing\run-web.bat
 
 This chooses an available port automatically, opens `/mobile/index.html`, and keeps the server alive until you press Enter in the command window.
 
+To run a visible phone-sized mobile testing demo, double-click:
+
+```bat
+Topic 4-mobile testing\run-demo.bat
+```
+
+This opens Chromium in a mobile viewport and runs one slow demo flow so the test actions are visible.
+
 ---
 
 ## API

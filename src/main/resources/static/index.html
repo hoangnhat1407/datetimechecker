@@ -10,52 +10,65 @@
 
 <body class="bg-light">
 
-<div class="container min-vh-100 d-flex justify-content-center align-items-center">
-    <div class="card shadow-sm p-4" style="max-width: 420px; width: 100%;">
-        <h1 class="text-center mb-4 text-primary">DateTimeChecker</h1>
-        <div class="mb-3">
-            <label for="day" class="form-label">Day</label>
-            <input type="text" id="day" class="form-control" placeholder="Day">
+    <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+        <div class="card shadow-sm p-4" style="max-width: 420px; width: 100%;">
+            <h1 class="text-center mb-4 text-primary">DateTimeChecker</h1>
+            <div class="mb-3">
+                <label for="day" class="form-label">Day</label>
+                <input type="text" id="day" class="form-control" placeholder="Day">
+            </div>
+
+            <div class="mb-3">
+                <label for="month" class="form-label">Month</label>
+                <input type="text" id="month" class="form-control" placeholder="Month">
+            </div>
+
+            <div class="mb-3">
+                <label for="year" class="form-label">Year</label>
+                <input type="text" id="year-id" class="form-control" placeholder="Year">
+            </div>
+
+            <button onclick="check()" class="btn btn-primary w-100">
+                Check
+            </button>
+
+            <p id="result" class="text-center mt-3 fw-semibold"></p>
         </div>
-
-        <div class="mb-3">
-            <label for="month" class="form-label">Month</label>
-            <input type="text" id="month" class="form-control" placeholder="Month">
-        </div>
-
-        <div class="mb-3">
-            <label for="year" class="form-label">Year</label>
-            <input type="text" id="year" class="form-control" placeholder="Year">
-        </div>
-
-        <button onclick="check()" class="btn btn-primary w-100">
-            Check
-        </button>
-
-        <p id="result" class="text-center mt-3 fw-semibold"></p>
     </div>
-</div>
 
-<script>
-    async function check() {
-        const day = document.getElementById("day").value;
-        const month = document.getElementById("month").value;
-        const year = document.getElementById("year").value;
+    <script>
+        function getInputValue(primaryId, fallbackPlaceholder, fallbackIndex) {
+            const byId = document.getElementById(primaryId);
+            if (byId) return byId.value;
 
-        const response = await fetch("/api/datetime/check", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ day, month, year })
-        });
+            const inputs = Array.from(document.querySelectorAll("input"));
+            const byPlaceholder = inputs.find((input) =>
+                input.placeholder.toLowerCase() === fallbackPlaceholder.toLowerCase()
+            );
+            if (byPlaceholder) return byPlaceholder.value;
 
-        const data = await response.json();
-        const result = document.getElementById("result");
+            return inputs[fallbackIndex] ? inputs[fallbackIndex].value : "";
+        }
 
-        result.textContent = data.message;
-        result.className = "text-center mt-3 fw-semibold";
-        result.style.color = data.valid ? "green" : "red";
-    }
-</script>
+        async function check() {
+            const day = getInputValue("day", "Day", 0);
+            const month = getInputValue("month", "Month", 1);
+            const year = getInputValue("year", "Year", 2);
+
+            const response = await fetch("/api/datetime/check", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ day, month, year })
+            });
+
+            const data = await response.json();
+            const result = document.getElementById("result");
+
+            result.textContent = data.message;
+            result.className = "text-center mt-3 fw-semibold";
+            result.style.color = data.valid ? "green" : "red";
+        }
+    </script>
 
 </body>
 
