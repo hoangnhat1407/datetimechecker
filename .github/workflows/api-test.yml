@@ -49,21 +49,46 @@ jobs:
           chmod +x mvnw
           ./mvnw package -DskipTests
       - name: Start Spring Boot
-        run: java -jar target/*.jar &
+        run: |
+          nohup java -jar target/*.jar > spring-boot.log 2>&1 &
+          echo $! > spring-boot.pid
       - name: Wait for app to be ready
         run: |
+          ready=false
           for i in {1..30}; do
-            if curl -s http://localhost:8080/api/datetime/check > /dev/null 2>&1; then
+            if curl -fsS -X POST http://localhost:8080/api/datetime/check \
+              -H "Content-Type: application/json" \
+              -d '{"day":"1","month":"1","year":"2000"}' > /dev/null; then
               echo "App is ready!"
+              ready=true
               break
             fi
             echo "Attempt $i - not ready yet"
             sleep 3
           done
+          if [ "$ready" != "true" ]; then
+            echo "App did not become ready. Spring Boot log:"
+            cat spring-boot.log || true
+            exit 1
+          fi
       - name: Install Newman
         run: npm install -g newman
       - name: Run API Tests
-        run: newman run "Topic 2-API testing/DateTimeChecker API.postman_collection.json" --iteration-data test-data.json --env-var "baseUrl=http://localhost:8080"
+        run: |
+          newman run "Topic 2-API testing/DateTimeChecker API.postman_collection.json" \
+            --iteration-data test-data.json \
+            --env-var "baseUrl=http://localhost:8080" \
+            --reporters cli,json \
+            --reporter-json-export newman-summary.json
+      - name: Upload API test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-test-reports
+          path: |
+            newman-summary.json
+            spring-boot.log
+          if-no-files-found: warn
 
   e2e-test:
     runs-on: ubuntu-latest
