@@ -7,8 +7,8 @@ const INVALID_COLOR = 'rgb(255, 0, 0)'; // red
 async function checkDate(page, day, month, year) {
   await page.fill('#day', day);
   await page.fill('#month', month);
-  await page.fill('#year', year);
-  await page.click('button');
+  await page.fill('#year-id', year);
+  await page.click('button.btn-primary');
   return page.locator('#result');
 }
 
