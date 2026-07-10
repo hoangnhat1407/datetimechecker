@@ -67,6 +67,19 @@
       "name": "datetimecheck-get",
       "event": [
         {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.variables.set(\"encodedDay\", encodeURIComponent(String(pm.iterationData.get(\"day\") ?? \"\")));",
+              "pm.variables.set(\"encodedMonth\", encodeURIComponent(String(pm.iterationData.get(\"month\") ?? \"\")));",
+              "pm.variables.set(\"encodedYear\", encodeURIComponent(String(pm.iterationData.get(\"year\") ?? \"\")));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
           "listen": "test",
           "script": {
             "exec": [
@@ -92,7 +105,7 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/datetime/check?day={{day}}&month={{month}}&year={{year}}",
+          "raw": "{{baseUrl}}/api/datetime/check?day={{encodedDay}}&month={{encodedMonth}}&year={{encodedYear}}",
           "host": [
             "{{baseUrl}}"
           ],
@@ -104,15 +117,15 @@
           "query": [
             {
               "key": "day",
-              "value": "{{day}}"
+              "value": "{{encodedDay}}"
             },
             {
               "key": "month",
-              "value": "{{month}}"
+              "value": "{{encodedMonth}}"
             },
             {
               "key": "year",
-              "value": "{{year}}"
+              "value": "{{encodedYear}}"
             }
           ]
         }

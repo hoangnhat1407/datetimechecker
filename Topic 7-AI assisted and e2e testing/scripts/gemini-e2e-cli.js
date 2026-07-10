@@ -114,9 +114,9 @@ function readText(relativePath) {
 }
 
 function buildPrompt() {
-  const testData = readText('test-data.json');
+  const testData = readText('shared/data/test-data.json');
   const html = readText('src/main/resources/static/index.html');
-  const existingSpec = readText('e2e/test.spec.js');
+  const existingSpec = readText('shared/e2e/test.spec.js');
   const config = readText('playwright.config.js');
 
   return `
@@ -175,7 +175,7 @@ Output rules:
 
 function buildPromptFromApprovedSuite(request, approvedSuite) {
   const html = readText('src/main/resources/static/index.html');
-  const existingSpec = readText('e2e/test.spec.js');
+  const existingSpec = readText('shared/e2e/test.spec.js');
   const config = readText('playwright.config.js');
 
   return `
@@ -733,6 +733,7 @@ async function assist(opts) {
 
   const keyPresent = Boolean(process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY);
   const defaultRequest = 'generate 5 test cases to test DateTimeChecker';
+  const autoApprove = parseBoolean(process.env.AI_TEST_AUTO_APPROVE, false);
   let lastSuite = '';
 
   console.log(color('============================================================', 'cyan'));
@@ -756,8 +757,13 @@ async function assist(opts) {
 
   try {
     while (true) {
-      const raw = await rl.question(color('Enter your testing request (or press Enter for default suite): ', 'magenta'));
+      const raw = autoApprove
+        ? (process.env.AI_TEST_REQUEST || '')
+        : await rl.question(color('Enter your testing request (or press Enter for default suite): ', 'magenta'));
       const request = raw.trim() || defaultRequest;
+      if (autoApprove) {
+        console.log(color(`[AI CONFIG] Auto-approve mode is enabled. Using request: "${request}"`, 'yellow'));
+      }
       console.log(color(`[AI CONFIG] Testing request: "${request}"`, 'green'));
       console.log('');
       console.log(color('[STEP 1] AI analyzing requirements and generating test suite...', 'yellow'));
@@ -767,6 +773,9 @@ async function assist(opts) {
       try {
         lastSuite = await requestAssistantSuite(rl, request, opts);
       } catch (err) {
+        if (autoApprove) {
+          throw err;
+        }
         console.log(color(`Gemini error: ${err.message}`, 'red'));
         const retry = await rl.question(color('Try another request? (Y/N): ', 'magenta'));
         if (!retry.trim().toLowerCase().startsWith('y')) break;
@@ -781,7 +790,12 @@ async function assist(opts) {
       console.log(color('>>> HUMAN-IN-THE-LOOP CONTROL REQUIRED <<<', 'red'));
       console.log('AI can suggest test designs, but humans must sign off to prevent false assumptions.');
 
-      const approval = await rl.question(color('Do you approve the AI-generated test suite? (Y/N): ', 'magenta'));
+      const approval = autoApprove
+        ? 'y'
+        : await rl.question(color('Do you approve the AI-generated test suite? (Y/N): ', 'magenta'));
+      if (autoApprove) {
+        console.log(color('[AUTO-APPROVE] Approved the AI-generated test suite for this non-interactive run.', 'yellow'));
+      }
       if (approval.trim().toLowerCase().startsWith('y')) {
         await executeApprovedSuite(request, lastSuite, opts, rl);
         break;
@@ -818,6 +832,10 @@ async function askSelfHealingPreference(rl, opts) {
   const defaultAnswer = opts.selfHeal ? 'Y' : 'N';
   console.log('');
   console.log(color('[AI CONFIG] AI Self-Healing helps recover broken Locators (e.g. changed submit buttons) visually.', 'yellow'));
+  if (parseBoolean(process.env.AI_TEST_AUTO_APPROVE, false)) {
+    console.log(color(`[AI CONFIG] Auto-approve mode uses default Self-Healing: ${defaultAnswer}.`, 'yellow'));
+    return opts;
+  }
   const answer = await rl.question(color(`Enable AI Self-Healing Locator Recovery? (Y/N) [Default: ${defaultAnswer}]: `, 'magenta'));
   const normalized = answer.trim().toLowerCase();
   const selfHeal = normalized ? normalized.startsWith('y') : opts.selfHeal;
@@ -872,7 +890,13 @@ async function executeApprovedSuite(request, suite, opts, rl = null) {
     console.log(color('[E2E COMPLETE] Approved AI-assisted tests finished successfully.', 'green'));
   } finally {
     if (serverProcess && !serverProcess.killed) {
-      serverProcess.kill();
+      if (process.platform === 'win32') {
+        spawnSync('taskkill.exe', ['/PID', String(serverProcess.pid), '/T', '/F'], {
+          stdio: 'ignore',
+        });
+      } else {
+        serverProcess.kill();
+      }
       console.log(color('[SERVER] Stopped local server started by ai-test.', 'dim'));
     }
   }

@@ -1,7 +1,7 @@
 // Generated from an approved AI-assisted test suite.
 // Source command: npm run ai-test
 // Model: gemini-3.1-flash-lite
-// Generated at: 2026-07-02T01:14:05.299Z
+// Generated at: 2026-07-10T15:52:42.322Z
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
@@ -23,7 +23,7 @@ const testCases = [
     "title": "Valid standard date",
     "testType": "EP",
     "day": "15",
-    "month": "06",
+    "month": "05",
     "year": "2023",
     "expectedStatus": "VALID"
   },
@@ -56,11 +56,11 @@ const testCases = [
   },
   {
     "id": "TC05",
-    "title": "Invalid month value",
+    "title": "Invalid day for month",
     "testType": "Error Guessing",
-    "day": "10",
-    "month": "13",
-    "year": "2020",
+    "day": "31",
+    "month": "04",
+    "year": "2022",
     "expectedStatus": "INVALID"
   }
 ];

@@ -20,7 +20,8 @@ services:
     command: >
       bash -c "npm ci && npx playwright test --project='Desktop Chrome'"
 
-  # Mobile test (iPhone 14 Pro Max emulation): docker compose run --rm mobile-test
+  # Native mobile test requires Android Emulator on the Windows host.
+  # Run locally with: Topic 4-Mobile testing\run.bat
   mobile-test:
     image: mcr.microsoft.com/playwright:v1.60.0-jammy
     profiles: ["test"]
@@ -33,4 +34,4 @@ services:
     volumes:
       - .:/work
     command: >
-      bash -c "npm ci && npx playwright test --config='Topic 4-mobile testing/playwright.mobile.config.js' --project='iPhone 14 Pro Max' --grep-invert 'Demo canvas'"
+      bash -c "echo 'Native mobile tests require Android Emulator and must be run on the host with Topic 4-Mobile testing/run.bat.'"

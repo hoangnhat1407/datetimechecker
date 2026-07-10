@@ -61,7 +61,7 @@ class _DateTimeCheckerPageState extends State<DateTimeCheckerPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('/api/datetime/check'),
+        Uri.parse('http://10.0.2.2:8080/api/datetime/check'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'day': day, 'month': month, 'year': year}),
       );
@@ -221,17 +221,21 @@ class _DateTimeCheckerPageState extends State<DateTimeCheckerPage> {
 
   Widget _buildTextField(
       TextEditingController controller, String label, String hint) {
-    return TextField(
-      controller: controller,
-      keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+    return Semantics(
+      label: label,
+      textField: true,
+      child: TextField(
+        controller: controller,
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+          labelText: label,
+          hintText: hint,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          filled: true,
+          fillColor: Colors.white,
         ),
-        filled: true,
-        fillColor: Colors.white,
       ),
     );
   }

@@ -11,7 +11,7 @@ $NewmanConsoleLog = Join-Path $ReportDir 'newman-console.log'
 $NewmanJsonFile = Join-Path $ReportDir 'newman-summary.json'
 $AppLogFile = Join-Path $ReportDir 'spring-boot.log'
 $CollectionFile = Join-Path $TopicDir 'DateTimeChecker API.postman_collection.json'
-$TestDataFile = Join-Path $ProjectDir 'test-data.json'
+$TestDataFile = Join-Path $ProjectDir 'shared\data\test-data.json'
 
 New-Item -ItemType Directory -Force -Path $ReportDir | Out-Null
 
@@ -89,7 +89,10 @@ if (-not $javaPath) {
     Stop-WithPause 1 '[ERROR] Java is not installed or not available in PATH.'
 }
 
-$newmanPath = Get-Command newman -ErrorAction SilentlyContinue
+$newmanPath = Get-Command newman.cmd -ErrorAction SilentlyContinue
+if (-not $newmanPath) {
+    $newmanPath = Get-Command newman -ErrorAction SilentlyContinue
+}
 $npxPath = Get-Command npx -ErrorAction SilentlyContinue
 if (-not $newmanPath -and -not $npxPath) {
     Stop-WithPause 1 '[ERROR] Newman is not installed. Install Node.js, then run: npm install -g newman'
@@ -161,12 +164,21 @@ $newmanArgs = @(
 
 Push-Location $ProjectDir
 try {
-    if ($newmanPath) {
-        & newman @newmanArgs 2>&1 | Tee-Object -FilePath $NewmanConsoleLog
-        $newmanExit = $LASTEXITCODE
-    } else {
-        & npx --yes newman @newmanArgs 2>&1 | Tee-Object -FilePath $NewmanConsoleLog
-        $newmanExit = $LASTEXITCODE
+    $previousErrorActionPreference = $ErrorActionPreference
+    $previousNodeOptions = $env:NODE_OPTIONS
+    $ErrorActionPreference = 'Continue'
+    $env:NODE_OPTIONS = (($env:NODE_OPTIONS, '--no-deprecation') | Where-Object { $_ } | Select-Object -Unique) -join ' '
+    try {
+        if ($newmanPath) {
+            & $newmanPath.Source @newmanArgs 2>&1 | Tee-Object -FilePath $NewmanConsoleLog
+            $newmanExit = $LASTEXITCODE
+        } else {
+            & npx --yes newman @newmanArgs 2>&1 | Tee-Object -FilePath $NewmanConsoleLog
+            $newmanExit = $LASTEXITCODE
+        }
+    } finally {
+        $ErrorActionPreference = $previousErrorActionPreference
+        $env:NODE_OPTIONS = $previousNodeOptions
     }
 } finally {
     Pop-Location
@@ -212,4 +224,3 @@ if (Test-Path $AppLogFile) {
 Write-Log ''
 Read-Host 'Press Enter to close'
 exit $newmanExit
-

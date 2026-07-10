@@ -1,21 +1,33 @@
-appId: chromium
+appId: com.example.mobile_app
 ---
-- openLink: http://localhost:8080/mobile/index.html
-- waitForAnimationToEnd:
-    timeout: 5000
+- launchApp:
+    clearState: true
 
-# Test 1: Ngày hợp lệ
 - tapOn:
-    point: "50%,35%"
+    text: "Wait"
+    optional: true
+
+- tapOn:
+    text: "Close app"
+    optional: true
+
+- extendedWaitUntil:
+    visible: "(?s).*DateTimeChecker.*"
+    timeout: 30000
+
+- tapOn: "Day"
 - inputText: "15"
-- tapOn:
-    point: "50%,50%"
+
+- tapOn: "Month"
 - inputText: "6"
-- tapOn:
-    point: "50%,62%"
+
+- tapOn: "Year"
 - inputText: "2000"
-- tapOn:
-    point: "35%,75%"
-- waitForAnimationToEnd:
-    timeout: 3000
+
+- hideKeyboard
+- tapOn: "Check"
+
+- extendedWaitUntil:
+    visible: "(?s).*15/06/2000 is a valid date\\..*"
+    timeout: 10000
 - takeScreenshot: valid-date-result

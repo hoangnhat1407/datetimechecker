@@ -36,29 +36,13 @@ docker compose run --rm mobile-test
 
 ### Mobile testing bằng double-click
 
-To run mobile testing without manual setup, double-click:
+To run native mobile testing without manual setup, double-click:
 
 ```bat
-Topic 4-mobile testing\run.bat
+Topic 4-Mobile testing\run.bat
 ```
 
-The script installs missing npm/Playwright browser dependencies, starts Spring Boot on an available port, waits for the app, then runs the Playwright mobile suite from `Topic 4-mobile testing/playwright.mobile.config.js`. It stops Spring Boot after the test run.
-
-To open the mobile web app and keep the server running, double-click:
-
-```bat
-Topic 4-mobile testing\run-web.bat
-```
-
-This chooses an available port automatically, opens `/mobile/index.html`, and keeps the server alive until you press Enter in the command window.
-
-To run a visible phone-sized mobile testing demo, double-click:
-
-```bat
-Topic 4-mobile testing\run-demo.bat
-```
-
-This opens Chromium in a mobile viewport and runs one slow demo flow so the test actions are visible.
+The script installs Android SDK command-line tools, Flutter SDK, Maestro CLI, creates an Android emulator, starts the Spring Boot backend on port 8080, builds the Flutter APK, installs it on the emulator, then runs the Maestro native app test.
 
 ---
 
@@ -93,7 +77,7 @@ Test logic validate trực tiếp trong Java, không cần chạy server.
 ./mvnw test
 ```
 
-Coverage: chạy parameterized test trên toàn bộ 57 case từ `test-data.json` (day/month/year không phải số, out of range, năm nhuận, tháng thiếu/đủ...) + 4 unit test riêng cho logic `isLeapYear`.
+Coverage: chạy parameterized test trên toàn bộ 57 case từ `shared/data/test-data.json` (day/month/year không phải số, out of range, năm nhuận, tháng thiếu/đủ...) + 4 unit test riêng cho logic `isLeapYear`.
 
 ---
 
@@ -103,16 +87,16 @@ Coverage: chạy parameterized test trên toàn bộ 57 case từ `test-data.jso
 - Mở collection **DateTimeChecker API** trong `Topic 2-API testing/DateTimeChecker API.postman_collection.json`
 - Tab **Body** → raw → JSON → điền `{"day":"...","month":"...","year":"..."}`
 - Tab **Scripts → Post-response** → viết assertions
-- **Run collection** → chọn `test-data.json` → Run
+- **Run collection** → chọn `shared/data/test-data.json` → Run
 
 ### Chạy tự động bằng Newman (CLI)
 ```bash
 newman run "Topic 2-API testing/DateTimeChecker API.postman_collection.json" \
-  --iteration-data test-data.json \
+  --iteration-data shared/data/test-data.json \
   --env-var "baseUrl=http://localhost:8080"
 ```
 
-`test-data.json` (sinh từ `generate-test-data.js`, dùng chung cho mọi loại test trong dự án) chứa 57 test case với các ngày hợp lệ và không hợp lệ — Newman chạy iteration qua toàn bộ tập này.
+`shared/data/test-data.json` (sinh từ `shared/scripts/generate-test-data.js`, dùng chung cho mọi loại test trong dự án) chứa 57 test case với các ngày hợp lệ và không hợp lệ — Newman chạy iteration qua toàn bộ tập này.
 
 ---
 
@@ -140,13 +124,13 @@ npx playwright test --headed=false
 slowMo: 1000  // 1 giây giữa mỗi thao tác
 ```
 
-Coverage: project **Desktop Chrome** (`test.spec.js`) chạy qua giao diện web với toàn bộ 57 case từ `test-data.json` — cùng bộ dữ liệu chia sẻ với Unit Test và API Test ở trên.
+Coverage: project **Desktop Chrome** (`shared/e2e/test.spec.js`) chạy qua giao diện web với toàn bộ 57 case từ `shared/data/test-data.json` — cùng bộ dữ liệu chia sẻ với Unit Test và API Test ở trên.
 
 ### Chạy riêng theo project (Desktop / Mobile)
 
 Desktop Playwright config is in `playwright.config.js`; mobile Playwright config is in `Topic 4-mobile testing/playwright.mobile.config.js`:
-- **Desktop Chrome** (`e2e/test.spec.js`) — test trang web thường tại `/`
-- **iPhone 14 Pro Max** (`Topic 4-mobile testing/e2e/mobile.spec.js`) — giả lập viewport mobile (430x932, touch) để test app Flutter Web tại `/mobile/index.html`: app load thành công, API trả đúng kết quả từ mobile context, chạy lại tập con test case từ `test-data.json`
+- **Desktop Chrome** (`shared/e2e/test.spec.js`) — test trang web thường tại `/`
+- **iPhone 14 Pro Max** (`Topic 4-mobile testing/e2e/mobile.spec.js`) — giả lập viewport mobile (430x932, touch) để test app Flutter Web tại `/mobile/index.html`: app load thành công, API trả đúng kết quả từ mobile context, chạy lại tập con test case từ `shared/data/test-data.json`
 
 ```bash
 npx playwright test --project="Desktop Chrome"
@@ -173,7 +157,23 @@ Generated AI specs, approved suites, JSON results, and text/CSV reports are stor
 See `Topic 7-AI assisted and e2e testing/docs/gemini-e2e-cli.md` for details.
 ---
 
-## 4. Mobile App (Flutter Web)
+## 4. Native Mobile App Testing (Flutter APK + Maestro)
+
+Topic 4 has been converted from Mobile Web testing to Native Mobile App testing.
+
+```bat
+Topic 4-Mobile testing\run.bat
+```
+
+The runner bootstraps Android SDK command-line tools, Flutter SDK, Maestro CLI, creates an AVD named `test_device`, starts Spring Boot on port `8080`, runs `flutter create .` if native folders are missing, builds a debug APK, installs it on the emulator, and runs `maestro/check-valid-date.yaml` against `appId: com.example.mobile_app`.
+
+The native Flutter app calls the backend through Android emulator host routing:
+
+```text
+http://10.0.2.2:8080/api/datetime/check
+```
+
+## 4.1. Mobile App (Legacy Flutter Web Notes)
 
 Ứng dụng Flutter Web cùng chức năng kiểm tra ngày (`Topic 4-mobile testing/mobile_app/`), dùng để demo & test trải nghiệm trên thiết bị di động. Build ra được nhúng vào Spring Boot tại `src/main/resources/static/mobile/` và phục vụ cùng server backend.
 
@@ -219,7 +219,7 @@ Tải tại: https://dl.k6.io/msi/k6-latest-amd64.msi
 
 ### Chạy (Spring Boot phải đang chạy)
 ```bash
-k6 run k6/load-test.js
+k6 run shared/k6/load-test.js
 ```
 
 Kịch bản:
@@ -292,16 +292,17 @@ datetimechecker/
 │   ├── mobile_app/                         ← Flutter Web mobile app source
 │   ├── e2e/mobile.spec.js                  ← Playwright mobile tests
 │   └── maestro/check-valid-date.yaml       ← Maestro mobile UI flow test
-├── e2e/
-│   ├── helpers/test-data.js               ← loader test-data.json dùng chung cho các spec
-│   └── test.spec.js                       ← Playwright E2E tests (Desktop Chrome)
-├── k6/
-│   └── load-test.js                       ← k6 load tests
+├── shared/
+│   ├── data/test-data.json                ← dữ liệu test dùng chung
+│   ├── docs/                              ← tài liệu chung
+│   ├── e2e/
+│   │   ├── helpers/test-data.js           ← loader test-data.json dùng chung cho các spec
+│   │   └── test.spec.js                   ← Playwright E2E tests (Desktop Chrome)
+│   ├── k6/load-test.js                    ← k6 load tests
+│   └── scripts/generate-test-data.js      ← sinh shared/data/test-data.json
 ├── .github/workflows/
 │   └── api-test.yml                       ← CI/CD pipeline
 ├── Dockerfile                             ← multi-stage build (Maven → JRE)
 ├── docker-compose.yml                     ← app + e2e-test + mobile-test (Playwright)
-├── generate-test-data.js                  ← sinh test-data.json
-├── test-data.json
 └── playwright.config.js                   ← project Desktop Chrome
 ```

@@ -76,7 +76,7 @@ jobs:
       - name: Run API Tests
         run: |
           newman run "Topic 2-API testing/DateTimeChecker API.postman_collection.json" \
-            --iteration-data test-data.json \
+            --iteration-data shared/data/test-data.json \
             --env-var "baseUrl=http://localhost:8080" \
             --folder "datetimecheck" \
             --reporters cli,json \
@@ -177,10 +177,10 @@ jobs:
           npm install @playwright/test
           chmod +x ./node_modules/.bin/playwright
           ./node_modules/.bin/playwright install --with-deps chromium
-      - name: Run Mobile Tests
+      - name: Native mobile test note
         # Bỏ qua [Demo canvas]: chỉ phục vụ demo trực quan (waitForTimeout dài),
         # tính đúng/sai đã được nhóm [Mobile] xác thực qua mobile context.
-        run: ./node_modules/.bin/playwright test --config="Topic 4-mobile testing/playwright.mobile.config.js" --project="iPhone 14 Pro Max" --grep-invert "Demo canvas"
+        run: echo "Native mobile tests now run on a Windows host with Topic 4-Mobile testing/run.bat"
 
   k6-test:
     runs-on: ubuntu-latest
@@ -214,7 +214,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install k6
       - name: Run k6 Load Test
-        run: k6 run k6/load-test.js
+        run: k6 run shared/k6/load-test.js
 
   cicd-report:
     runs-on: ubuntu-latest

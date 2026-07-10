@@ -128,7 +128,7 @@ pm.test(`[${desc}] valid matches expected`, () => {
 
 ```bash
 newman run "Topic 2-API testing/DateTimeChecker API.postman_collection.json" \
-  --iteration-data test-data.json \
+  --iteration-data shared/data/test-data.json \
   --env-var "baseUrl=http://localhost:8080"
 ```
 

@@ -41,6 +41,16 @@ async function captureAndCompare(page, fileName) {
   });
 }
 
+async function fillField(page, selector, placeholder, value) {
+  const primary = page.locator(selector);
+  if (await primary.count() > 0) {
+    await primary.fill(value);
+    return;
+  }
+
+  await page.getByPlaceholder(placeholder).fill(value);
+}
+
 test.describe('DateTimeChecker visual regression', () => {
   test('home page empty form', async ({ page }) => {
     await preparePage(page);
@@ -49,9 +59,9 @@ test.describe('DateTimeChecker visual regression', () => {
 
   test('valid date result state', async ({ page }) => {
     await preparePage(page);
-    await page.fill('#day', '29');
-    await page.fill('#month', '2');
-    await page.fill('#year', '2024');
+    await fillField(page, '#day', 'Day', '29');
+    await fillField(page, '#month', 'Month', '2');
+    await fillField(page, '#year', 'Year', '2024');
     await page.click('button');
     await expect(page.locator('#result')).toContainText(/is a valid date/i);
     await captureAndCompare(page, 'valid-date-result.png');
@@ -59,9 +69,9 @@ test.describe('DateTimeChecker visual regression', () => {
 
   test('invalid date result state', async ({ page }) => {
     await preparePage(page);
-    await page.fill('#day', '31');
-    await page.fill('#month', '2');
-    await page.fill('#year', '2024');
+    await fillField(page, '#day', 'Day', '31');
+    await fillField(page, '#month', 'Month', '2');
+    await fillField(page, '#year', 'Year', '2024');
     await page.click('button');
     await expect(page.locator('#result')).toContainText(/is an invalid date/i);
     await captureAndCompare(page, 'invalid-date-result.png');

@@ -5,9 +5,9 @@
   "main": "playwright.config.js",
   "scripts": {
     "test:e2e": "playwright test --project=\"Desktop Chrome\"",
-    "test:mobile": "playwright test --config \"Topic 4-mobile testing/playwright.mobile.config.js\" --project=\"iPhone 14 Pro Max\" --grep-invert \"Demo canvas\"",
-    "test:mobile:demo": "playwright test --config \"Topic 4-mobile testing/playwright.mobile.config.js\" --project=\"iPhone 14 Pro Max\" -g \"Demo canvas\" --headed --workers=1",
-    "generate:test-data": "node generate-test-data.js",
+    "test:mobile": "powershell -NoProfile -ExecutionPolicy Bypass -File \"Topic 4-Mobile testing/run-mobile-test.ps1\"",
+    "test:mobile:demo": "powershell -NoProfile -ExecutionPolicy Bypass -File \"Topic 4-Mobile testing/run-mobile-test.ps1\"",
+    "generate:test-data": "node \"shared/scripts/generate-test-data.js\"",
     "ai-test": "node \"Topic 7-AI assisted and e2e testing/scripts/gemini-e2e-cli.js\" assist",
     "gemini:chat": "node \"Topic 7-AI assisted and e2e testing/scripts/gemini-e2e-cli.js\" chat",
     "gemini:e2e:generate": "node \"Topic 7-AI assisted and e2e testing/scripts/gemini-e2e-cli.js\" generate",
